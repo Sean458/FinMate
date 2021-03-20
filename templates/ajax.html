@@ -1,0 +1,108 @@
+<script>
+
+    // Insert Data
+    $("#btnsave").click(function () {
+        console.log("Save Button Clicked");
+        output = "";
+        let cid = $("#catid").val();
+        let ctype = $("#ctyep").val();
+        let cat = $("#cat").val();
+        let csr = $("input[name=csrfmiddlewaretoken]").val();
+        if (cat == "") {
+            $("#msg").text("Please Enter Category");
+            $("#msg").show();
+
+        } else {
+            mydata = { categoryid: cid, ctype: ctype, category: cat, csrfmiddlewaretoken: csr }
+            $.ajax({
+                url: "{% url 'save' %}",
+                method: "POST",
+                data: mydata,
+                dataType: 'json',
+                success: function (data) {
+                    // console.log(data);
+                    x = data.category_data;
+                    if (data.status == "Save") {
+                        if (cid == '')
+                            $("#msg").text("Data Saved Successfully");
+                        else
+                            $("#msg").text("Data Edited Successfully");
+                        $("#msg").show();
+                        // console.log("Form Submitted Successfully");
+                        // console.log(x);
+                        for (i = 0; i < x.length; i++) {
+                            output +=
+                                "<tr><td>" +
+                                x[i].category_name +
+                                "</td>" +
+                                "<td> <input type='button' class='btn btn-warning btn-sm btn-edit' value='Edit' data-cid="
+                                + x[i].id +
+                                "> <input type='button' class='btn btn-danger btn-sm btn-del' value='Delete' data-cid="
+                                + x[i].id + "></td></tr>"
+                        }
+                        $("#tbody").html(output);
+                        $("#catid").val('');
+                        $("form")[0].reset();
+                    }
+                    if (data.status == 0) {
+                        $("#msg").text("Unable to Save Data");
+                        $("#msg").show();
+                        // console.log("Unable to Save Form");
+                        //$("#stuid").val('');
+                        $("form")[0].reset();
+                    }
+                }
+            });
+        }
+    });
+
+    // Delete Data
+    $("tbody").on("click", ".btn-del", function () {
+        console.log("Delete Button Clicked");
+        let id = $(this).attr("data-cid");
+        let csr = $("input[name=csrfmiddlewaretoken]").val();
+        // console.log(id);
+        mydata = { cid: id, csrfmiddlewaretoken: csr };
+        mythis = this;
+        $.ajax({
+            url: "{% url 'delete' %}",
+            method: "POST",
+            data: mydata,
+            success: function (data) {
+                // console.log(data);
+                if (data.status == 1) {
+                    $("#msg").text("Data Deleted Successfully");
+                    $("#msg").show();
+                    // console.log("Data Deleted Successfully");
+                    $(mythis).closest("tr").fadeOut();
+                }
+                if (data.status == 0) {
+                    $("#msg").text("Unable to Delete Data");
+                    $("#msg").show();
+                    // console.log("Unable to Delete Data");
+                }
+            },
+        });
+    });
+
+    // Edit Data
+    $("tbody").on("click", ".btn-edit", function () {
+        // console.log("Edit Button Clicked");
+        let id = $(this).attr("data-cid");
+        let csr = $("input[name=csrfmiddlewaretoken]").val();
+        // console.log(id);
+        mydata = { cid: id, csrfmiddlewaretoken: csr };
+        $.ajax({
+            url: "{% url 'edit' %}",
+            method: "POST",
+            data: mydata,
+            success: function (data) {
+                // console.log(data);
+                $("#catid").val(data.cid);
+                $("#cat").val(data.category_name);
+            },
+        });
+    });
+
+
+</script>

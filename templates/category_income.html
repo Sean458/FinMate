@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <title>Category Income</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+
+        <h4 class="text-center alert alert-info">Add/Update Income Category</h4>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="hidden" name="catid" id="catid">
+                <input type="hidden" value="income" id="ctype">
+                <input type="text" class="form-control" placeholder="Category" id="cat">
+                <input type="button" class="btn btn-success" id="btnsave" value="Save">
+            </div>
+        </form>
+
+        <div class="mt-5">
+            <div id="msg" class="mt-4 alert alert-secondary" style="display:none"></div>
+            <h4 class="text-center alert alert-info">Availabe Income Categories</h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Category</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody" id="tbody">
+                    {% for category in category_list%}
+                    <tr>
+                        <td>
+                            {{category.category_name}}
+                        </td>
+                        <td>
+                            <input type="button" data-cid="{{category.id}}" class="btn btn-warning btn-sm btn-edit"
+                                value="Edit">
+                            <input type="button" data-cid="{{category.id}}" class="btn btn-danger btn-sm btn-del"
+                                value="Delete">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="{% static '/js/jquery.js' %}"></script>
+    <script src="{% static '/js/popper.js' %}"></script>
+    <script src="{% static '/js/bootstrap.js' %}"></script>
+
+    {% include "ajax.html" %}
+
+</body>
+
+</html>
