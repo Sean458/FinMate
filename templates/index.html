@@ -305,10 +305,26 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> <a class="sidebar-link" href="ticket-list.html"
+                        <!-- <li class="sidebar-item"> <a class="sidebar-link" href="ticket-list.html"
                                 aria-expanded="false"><i data-feather="tag" class="feather-icon"></i><span
                                     class="hide-menu">Add transaction
                                 </span></a>
+                        </li> -->
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow"
+                                href="{% static 'javascript:void(0)'%}" aria-expanded="false"><i
+                                    data-feather="file-text" class="feather-icon"></i><span
+                                    class="hide-menu">Transaction</span></a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                <li class="sidebar-item"><a href="/addincome" class="sidebar-link"><span
+                                            class="hide-menu">
+                                            Add Income
+                                        </span></a>
+                                </li>
+                                <li class="sidebar-item"><a href="/addexpense" class="sidebar-link"><span
+                                            class="hide-menu"> Add Expense
+                                        </span></a>
+                                </li>
+                            </ul>
                         </li>
 
                         <li class="list-divider"></li>

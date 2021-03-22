@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <title>Transaction</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody id="tbody" id="tbody">
+                {% for t in alltransaction%}
+                <tr>
+                    <td>
+                        {{t.category.category_name}}
+                    </td>
+                    <td>
+                        {{t.amount}}
+                    </td>
+                    <td>
+                        {{t.date}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

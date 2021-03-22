@@ -1,6 +1,7 @@
 from django.db.models import *
 
 from django.contrib.auth import authenticate, login, logout
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -132,3 +133,33 @@ def edit_data(request):
         category_data = {"cid": category.id,
                          "category_name": category.category_name}
         return JsonResponse(category_data)
+
+
+def addincome(request):
+    category_list = Category.objects.filter(
+        user=request.user, is_expense=False)
+    return render(request, "addtransaction.html", {'category_list': category_list, 'title': 'Income'})
+
+
+def addexpense(request):
+    category_list = Category.objects.filter(
+        user=request.user, is_expense=True)
+    return render(request, "addtransaction.html", {'category_list': category_list, 'title': 'Expense'})
+
+
+def transaction(request):
+    if request.method == "POST":
+        catid = request.POST.get('catid')
+        print(catid)
+        catobj = Category.objects.get(pk=catid)
+        amount = request.POST.get('amount')
+        print(amount)
+        date = request.POST.get('date')
+        print(date)
+        newtransaction = Transaction(
+            user=request.user, category=catobj, amount=amount, date=date)
+        newtransaction.save()
+        return redirect('/transaction')
+    else:
+        alltransaction = Transaction.objects.filter(user=request.user)
+        return render(request, "transaction.html", {'alltransaction': alltransaction})
