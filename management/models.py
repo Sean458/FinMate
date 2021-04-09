@@ -18,3 +18,4 @@ class Transaction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     amount = models.IntegerField()
     date = models.DateField()
+    feedback = models.TextField()
