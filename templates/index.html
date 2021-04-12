@@ -31,6 +31,9 @@
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
+    {% if alert_flag %}
+        <script>alert("Hey,according to your previous purchases, your overall experience with this item was not great. We suggest you spend less on it.")</script>  
+    {% endif %}
     <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
@@ -57,14 +60,7 @@
                     <div class="navbar-brand">
                         <!-- Logo icon -->
                         <a href="/">
-                            <b class="logo-icon">
-                                <!-- Dark Logo icon -->
-                                <img src="{% static '/assets/images/logo-icon.png'%}" alt="homepage"
-                                    class="dark-logo" />
-                                <!-- Light Logo icon -->
-                                <img src="{% static '/assets/images/logo-icon.png'%}" alt="homepage"
-                                    class="light-logo" />
-                            </b>
+                            
                             <!--End Logo icon -->
                             <!-- Logo text -->
                             <span class="logo-text">
@@ -72,8 +68,7 @@
                                 <img src="{% static '/assets/images/logo-text.png'%}" alt="homepage"
                                     class="dark-logo" />
                                 <!-- Light Logo text -->
-                                <img src="{% static '/assets/images/logo-light-text.png'%}" class="light-logo"
-                                    alt="homepage" />
+                                
                             </span>
                         </a>
                     </div>
@@ -407,7 +402,7 @@
                                         <span
                                             class="badge bg-primary font-12 text-white font-weight-medium badge-pill ml-2 d-lg-block d-md-none">+18.33%</span>
                                     </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Clients</h6>
+                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Savings</h6>
                                 </div>
                                 <div class="ml-auto mt-md-3 mt-lg-0">
                                     <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
@@ -439,7 +434,7 @@
                                         <span
                                             class="badge bg-danger font-12 text-white font-weight-medium badge-pill ml-2 d-md-none d-lg-block">-18.33%</span>
                                     </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Projects</h6>
+                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Expenses</h6>
                                 </div>
                                 <div class="ml-auto mt-md-3 mt-lg-0">
                                     <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
@@ -471,25 +466,34 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Total Sales</h4>
-                                <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
-                                <ul class="list-style-none mb-0">
-                                    <li>
-                                        <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                                        <span class="text-muted">Direct Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">$2346</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                                        <span class="text-muted">Referral Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">$2108</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                        <span class="text-muted">Affiliate Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">$1204</span>
-                                    </li>
-                                </ul>
+                                
+                                
+                                <a class="nav-link" href="/graph">Total Sales</a>
+                                <div id="container"></div>
+                              <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                              <script>
+                                Highcharts.chart('container', {
+                                    chart: {
+                                        type: 'line'
+                                    },
+                                    title: {
+                                        text: 'User Income'
+                                    },
+                                    xAxis: {
+                                        categories: {{ categories|safe }}
+                                    },
+                                    
+                                    series: [ {
+                                        name: "Income Earned",
+                                        data: {{ amount_series }},
+                                        color: 'blue'
+                                    }] 
+                                  });
+                              </script>
+                                
+                              
+                              
+                                
                             </div>
                         </div>
                     </div>

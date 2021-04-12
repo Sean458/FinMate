@@ -18,9 +18,11 @@
                     <th scope="col">Category</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Date</th>
+                    <th scope="col">FeedBack</th>
                 </tr>
             </thead>
             <tbody id="tbody" id="tbody">
+                
                 {% for t in alltransaction%}
                 <tr>
                     <td>
@@ -32,8 +34,14 @@
                     <td>
                         {{t.date}}
                     </td>
+                    <td>
+                        {{t.feedback}}
+                    </td>
                 </tr>
                 {% endfor %}
+
+
+                
             </tbody>
         </table>
     </div>

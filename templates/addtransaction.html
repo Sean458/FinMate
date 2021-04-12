@@ -7,8 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+ 
     <title>Add Expense</title>
 </head>
+
+
+
+
 
 <body>
     <div class="container mt-5">
@@ -33,6 +38,13 @@
                 <label for="date">Date</label>
                 <input class="form-control" type="date" id="date" name="date" required>
             </div>
+            <div class="form-group">
+                <label for="feedback">FeedBack</label>
+                <input class="form-control" type="text" id="feedback" name="feedback" >
+            </div>
+
+            
+
 
             <button class="btn btn-primary mt-3" type="submit">Submit form</button>
         </form>

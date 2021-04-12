@@ -19,3 +19,5 @@ class Transaction(models.Model):
     amount = models.IntegerField()
     date = models.DateField()
     feedback = models.TextField()
+    sentiment=models.IntegerField(default=0)
+    

@@ -5,7 +5,8 @@ from . import views
 
 app_name = 'management'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.home, name='home'),
+    path('index', views.index, name='index'),
     path('users/register', views.register, name='register'),
     path('users/login', views.login_view, name='login'),
     path('users/logout', views.logout_view, name='logout'),
@@ -13,5 +14,6 @@ urlpatterns = [
     path('categories/expense', views.category_expense, name='category_expense'),
     path('addincome', views.addincome, name='addincome'),
     path('addexpense', views.addexpense, name='addexpense'),
-    path('transaction', views.transaction, name='transaction')
+    path('transaction', views.transaction, name='transaction'),
+    path('graph/',views.graph_view, name='graph_view'),
 ]
