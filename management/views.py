@@ -13,8 +13,11 @@ import json
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 # Create your views here.
+
+
 def home(request):
     return render(request, 'home.html')
+
 
 def index(request):
     return render(request, 'index.html')
@@ -163,87 +166,86 @@ def transaction(request):
         print(date)
         feedback = request.POST.get('feedback')
         print(feedback)
-        
-        new_words = {'cushiony':1, 'comfort':0,'support':0, 'unsupportive':-1, 'lightweight':1, 'heavyweight':-1, 'stabilize':1, 'instability':-1, 'unresponsive':-1, 'durable':1, 'breathable':1, 'protective':1, 'too':0, 'flimsy':-1, 'freedom':0, 'tore':-1.5, 'narrow':-1, 'strike':0, 'right':1.5, 'hole':-1.5, 'never':-.5, 'holes':-1.5, "stiff":-1, 'return':-.5, 'returning':-.5, 'issue':-1, "untied":-1, 'clunky':-1, 'stiffness':-1, 'swollen':-1, 'stylish':1, 'rip':-1, 'returned':-.5, 'bulky':-1} #this list specifies sentiment scores for common words that are related to running shoes, in other words it adds context to the sentiment analysis
-        sid = SentimentIntensityAnalyzer()
-        sid.lexicon.update(new_words) #updates the lexicon with the specified sentiment scores
-        score = sid.polarity_scores(feedback) #calculates the positive, negative, neutral, and compound sentiment score for the review
-        compound = score.get('compound') 
-        print("compound",compound)
-        
-        
 
+        new_words = {'cushiony': 1, 'comfort': 0, 'support': 0, 'unsupportive': -1, 'lightweight': 1, 'heavyweight': -1, 'stabilize': 1, 'instability': -1, 'unresponsive': -1, 'durable': 1, 'breathable': 1, 'protective': 1, 'too': 0, 'flimsy': -1, 'freedom': 0, 'tore': -1.5, 'narrow': -1, 'strike': 0, 'right': 1.5, 'hole': -1.5, 'never': -.5,
+                     'holes': -1.5, "stiff": -1, 'return': -.5, 'returning': -.5, 'issue': -1, "untied": -1, 'clunky': -1, 'stiffness': -1, 'swollen': -1, 'stylish': 1, 'rip': -1, 'returned': -.5, 'bulky': -1}  # this list specifies sentiment scores for common words that are related to running shoes, in other words it adds context to the sentiment analysis
+        sid = SentimentIntensityAnalyzer()
+        # updates the lexicon with the specified sentiment scores
+        sid.lexicon.update(new_words)
+        # calculates the positive, negative, neutral, and compound sentiment score for the review
+        score = sid.polarity_scores(feedback)
+        print("Score", score)
+        compound = score.get('compound')
+        print("compound", compound)
 
         newtransaction = Transaction(
-            user=request.user, category=catobj, amount=amount, date=date, feedback=feedback,sentiment=compound)
-        
+            user=request.user, category=catobj, amount=amount, date=date, feedback=feedback, sentiment=compound)
+
         newtransaction.save()
         return redirect('/transaction')
     else:
-        
-        
-        dataset1=Transaction.objects.raw('SELECT distinct(id), user_id,feedback FROM management_transaction ')
 
-        review=list()
+        dataset1 = Transaction.objects.raw(
+            'SELECT distinct(id), user_id,feedback FROM management_transaction ')
+
+        for d in dataset1:
+            print(d)
+
+        review = list()
         for entry in dataset1:
             usid = Transaction.objects.get(pk=entry.id)
             fdb = usid.feedback
+            print(fdb)
             review.append('%s' % fdb)
-        total=0
+        print(review)
+        total = 0
         for i in review:
             print(i)
-            new_words = {'cushiony':1, 'comfort':0,'support':0, 'unsupportive':-1, 'lightweight':1, 'heavyweight':-1, 'stabilize':1, 'instability':-1, 'unresponsive':-1, 'durable':1, 'breathable':1, 'protective':1, 'too':0, 'flimsy':-1, 'freedom':0, 'tore':-1.5, 'narrow':-1, 'strike':0, 'right':1.5, 'hole':-1.5, 'never':-.5, 'holes':-1.5, "stiff":-1, 'return':-.5, 'returning':-.5, 'issue':-1, "untied":-1, 'clunky':-1, 'stiffness':-1, 'swollen':-1, 'stylish':1, 'rip':-1, 'returned':-.5, 'bulky':-1} #this list specifies sentiment scores for common words that are related to running shoes, in other words it adds context to the sentiment analysis
+            new_words = {'cushiony': 1, 'comfort': 0, 'support': 0, 'unsupportive': -1, 'lightweight': 1, 'heavyweight': -1, 'stabilize': 1, 'instability': -1, 'unresponsive': -1, 'durable': 1, 'breathable': 1, 'protective': 1, 'too': 0, 'flimsy': -1, 'freedom': 0, 'tore': -1.5, 'narrow': -1, 'strike': 0, 'right': 1.5, 'hole': -1.5, 'never': -.5,
+                         'holes': -1.5, "stiff": -1, 'return': -.5, 'returning': -.5, 'issue': -1, "untied": -1, 'clunky': -1, 'stiffness': -1, 'swollen': -1, 'stylish': 1, 'rip': -1, 'returned': -.5, 'bulky': -1}  # this list specifies sentiment scores for common words that are related to running shoes, in other words it adds context to the sentiment analysis
             sid = SentimentIntensityAnalyzer()
-            sid.lexicon.update(new_words) #updates the lexicon with the specified sentiment scores
-            score = sid.polarity_scores(i) #calculates the positive, negative, neutral, and compound sentiment score for the review
-            compound = score.get('compound') 
-            
-            total+=compound
+            # updates the lexicon with the specified sentiment scores
+            sid.lexicon.update(new_words)
+            # calculates the positive, negative, neutral, and compound sentiment score for the review
+            score = sid.polarity_scores(i)
+            print("Score", score)
+            compound = score.get('compound')
+            print("compound", compound)
+
+            total += compound
             print(total)
         alltransaction = Transaction.objects.filter(user=request.user)
-        if total<-0.2:
-            
+        if total < -0.2:
+
             return render(request, 'index.html', {'alert_flag': True})
         else:
-            
+
             return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 
-
-
-
-
 def graph_view(request):
-    dataset = Transaction.objects.raw('SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
+    dataset = Transaction.objects.raw(
+        'SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
     #dataset1 = Vehicle.objects.raw('SELECT model from management_vehicle where VehicleID in (select VehicleID_id from management_booking)')
 
-   
-      #  .values('VehicleID') \
-      #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
-      #  .group_by('VehicleID') \
-      #  .order_by('VehicleID')    
+    #  .values('VehicleID') \
+    #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
+    #  .group_by('VehicleID') \
+    #  .order_by('VehicleID')
 
     categories = list()
     date_series = list()
     amount_series = list()
 
-    
-
-        
     for entry in dataset:
         usid = Transaction.objects.get(pk=entry.id)
         name = usid.user_id
         categories.append('%s' % name)
-        #date_series.append((entry.date))
+        # date_series.append((entry.date))
         amount_series.append((int)(entry.total_amount))
-
-   
 
     return render(request, 'index.html', {
         'categories': json.dumps(categories),
-        #'date_series': json.dumps(date_series),
+        # 'date_series': json.dumps(date_series),
         'amount_series': json.dumps(amount_series)
     })
-
-
-    
