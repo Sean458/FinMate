@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
  
     <title>Add Expense</title>
 </head>
@@ -16,6 +18,11 @@
 
 
 <body>
+    {% if alert_flag %}
+    <div class="alert alert-info">
+        <strong>Info!</strong> Hey, according to your previous purchases, your overall experience with this item was not great. <a href="#" class="alert-link">We suggest you spend less on it.</a>.
+    </div> 
+    {% endif %}
     <div class="container mt-5">
         <h5>Add {{title}}</h5>
         <form action="/transaction" method="POST">

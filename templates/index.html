@@ -31,9 +31,7 @@
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
-    {% if alert_flag %}
-        <script>alert("Hey,according to your previous purchases, your overall experience with this item was not great. We suggest you spend less on it.")</script>  
-    {% endif %}
+    
     <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
@@ -468,23 +466,23 @@
                             <div class="card-body">
                                 
                                 
-                                <a class="nav-link" href="/graph">Total Sales</a>
-                                <div id="container"></div>
+                                <a class="nav-link" href="/graph">Total Transactions</a>
+                                <div id="container1"></div>
                               <script src="https://code.highcharts.com/highcharts.src.js"></script>
                               <script>
-                                Highcharts.chart('container', {
+                                Highcharts.chart('container1', {
                                     chart: {
-                                        type: 'line'
+                                        type: 'pie'
                                     },
                                     title: {
-                                        text: 'User Income'
+                                        text: 'Transactions'
                                     },
                                     xAxis: {
                                         categories: {{ categories|safe }}
                                     },
                                     
                                     series: [ {
-                                        name: "Income Earned",
+                                        name: 'Transactions',
                                         data: {{ amount_series }},
                                         color: 'blue'
                                     }] 
@@ -500,14 +498,33 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Net Income</h4>
-                                <div class="net-income mt-4 position-relative" style="height:294px;"></div>
-                                <ul class="list-inline text-center mt-5 mb-2">
-                                    <li class="list-inline-item text-muted font-italic">Sales for this month</li>
-                                </ul>
+                                
+                                <a class="nav-link" href="/graph">Total Expense</a>
+                                <div id="container2"></div>
+                              <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                              <script>
+                                Highcharts.chart('container2', {
+                                    chart: {
+                                        type: 'line'
+                                    },
+                                    title: {
+                                        text: 'User Expense'
+                                    },
+                                    xAxis: {
+                                        categories: {{ categories|safe }}
+                                    },
+                                    
+                                    series: [ {
+                                        name: "Expense Incurred",
+                                        data: {{ expense_series }},
+                                        color: 'blue'
+                                    }] 
+                                  });
+                              </script>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">

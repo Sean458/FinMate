@@ -217,35 +217,56 @@ def transaction(request):
         alltransaction = Transaction.objects.filter(user=request.user)
         if total < -0.2:
 
-            return render(request, 'index.html', {'alert_flag': True})
+            return render(request, 'addtransaction.html', {'alert_flag': True})
         else:
 
             return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 
 def graph_view(request):
-    dataset = Transaction.objects.raw(
-        'SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
-    #dataset1 = Vehicle.objects.raw('SELECT model from management_vehicle where VehicleID in (select VehicleID_id from management_booking)')
-
-    #  .values('VehicleID') \
-    #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
-    #  .group_by('VehicleID') \
-    #  .order_by('VehicleID')
+    dataset = Transaction.objects.raw('SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
+    dataset2=Transaction.objects.raw('SELECT management_transaction.id,management_transaction.user_id, management_transaction.amount ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1')
+   
+      #  .values('VehicleID') \
+      #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
+      #  .group_by('VehicleID') \
+      #  .order_by('VehicleID')    
 
     categories = list()
     date_series = list()
     amount_series = list()
+    expense_series=list()
+    cat_name_series=list()
 
+    
+    
+        
     for entry in dataset:
-        usid = Transaction.objects.get(pk=entry.id)
-        name = usid.user_id
+        uid = Transaction.objects.get(pk=entry.id)
+        name = uid.user_id
+        
+        #name = usid.user_id
         categories.append('%s' % name)
-        # date_series.append((entry.date))
+        #date_series.append((entry.date))
         amount_series.append((int)(entry.total_amount))
+
+    for entry in dataset2:
+        uid=Transaction.objects.get(pk=entry.id)
+        amount=uid.amount
+        expense_series.append((int)(entry.amount))
+        #cat_name=uid.category_name
+        #cat_name_series.append('%s' % cat_name)
+
+
+
+
+   
 
     return render(request, 'index.html', {
         'categories': json.dumps(categories),
-        # 'date_series': json.dumps(date_series),
-        'amount_series': json.dumps(amount_series)
+        #'date_series': json.dumps(date_series),
+        'amount_series': json.dumps(amount_series),
+        'expense_series': json.dumps(expense_series),
+        #'cat_name_series': json.dumps(cat_name_series),
     })
+
