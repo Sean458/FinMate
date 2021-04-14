@@ -20,3 +20,7 @@ class Transaction(models.Model):
     date = models.DateField()
     feedback = models.TextField()
     sentiment = models.FloatField(default=0.0)
+
+class CustomUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True,)
+    country = models.CharField(max_length=30)
