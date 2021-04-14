@@ -81,7 +81,7 @@ def index(request):
             categories.append('%s' % name)
             expense_series.append((int)(entry.amount))
 
-    for entry in dataset2:
+    for entry in dataset3:
         
         uid=Transaction.objects.get(pk=entry.id)
         amount=uid.amount
