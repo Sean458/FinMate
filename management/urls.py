@@ -15,5 +15,5 @@ urlpatterns = [
     path('addincome', views.addincome, name='addincome'),
     path('addexpense', views.addexpense, name='addexpense'),
     path('transaction', views.transaction, name='transaction'),
-    path('graph/',views.graph_view, name='graph_view'),
+    
 ]

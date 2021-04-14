@@ -20,7 +20,60 @@ def home(request):
 
 
 def index(request):
-    return render(request, 'index.html')
+    dataset = Transaction.objects.raw('SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
+    dataset2=Transaction.objects.raw('SELECT management_transaction.id,management_transaction.user_id, management_transaction.amount ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1')
+   
+      #  .values('VehicleID') \
+      #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
+      #  .group_by('VehicleID') \
+      #  .order_by('VehicleID')    
+
+    categories = list()
+    date_series = list()
+    amount_series = list()
+    expense_series=list()
+    cat_name_series=list()
+
+    
+    
+        
+    for entry in dataset:
+        uid = Transaction.objects.get(pk=entry.id)
+        name = uid.user_id
+        
+        #name = usid.user_id
+        categories.append('%s' % name)
+        #date_series.append((entry.date))
+        amount_series.append((int)(entry.total_amount))
+
+    for entry in dataset2:
+        uid=Transaction.objects.get(pk=entry.id)
+        amount=uid.amount
+        expense_series.append((int)(entry.amount))
+    
+    
+    
+    
+    arr=[]
+    usd=request.user.id
+    income=Transaction.objects.raw('SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s',[usd])
+    for i in income:
+        arr.append(i.amount)
+        
+    expenses=Transaction.objects.raw('SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s',[usd])
+    for i in expenses:
+        arr.append(i.amount)
+    if arr[0]!=None and arr[1]!=None:
+        savings=arr[0]-arr[1]
+    else:
+        savings=None
+    
+
+    return render(request, 'index.html',{'income': income,'expenses': expenses,'savings': savings,'categories': json.dumps(categories),
+        #'date_series': json.dumps(date_series),
+        'amount_series': json.dumps(amount_series),
+        'expense_series': json.dumps(expense_series),})
+
 
 
 def register(request):
@@ -62,7 +115,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             # messages.success(request, "Logged In Successfuly!")
-            return redirect("/")
+            return redirect("/index")
         else:
             # messages.warning(request, "Invalid Credentials")
             return redirect('/users/login')
@@ -223,50 +276,4 @@ def transaction(request):
             return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 
-def graph_view(request):
-    dataset = Transaction.objects.raw('SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
-    dataset2=Transaction.objects.raw('SELECT management_transaction.id,management_transaction.user_id, management_transaction.amount ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1')
-   
-      #  .values('VehicleID') \
-      #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
-      #  .group_by('VehicleID') \
-      #  .order_by('VehicleID')    
-
-    categories = list()
-    date_series = list()
-    amount_series = list()
-    expense_series=list()
-    cat_name_series=list()
-
-    
-    
-        
-    for entry in dataset:
-        uid = Transaction.objects.get(pk=entry.id)
-        name = uid.user_id
-        
-        #name = usid.user_id
-        categories.append('%s' % name)
-        #date_series.append((entry.date))
-        amount_series.append((int)(entry.total_amount))
-
-    for entry in dataset2:
-        uid=Transaction.objects.get(pk=entry.id)
-        amount=uid.amount
-        expense_series.append((int)(entry.amount))
-        #cat_name=uid.category_name
-        #cat_name_series.append('%s' % cat_name)
-
-
-
-
-   
-
-    return render(request, 'index.html', {
-        'categories': json.dumps(categories),
-        #'date_series': json.dumps(date_series),
-        'amount_series': json.dumps(amount_series),
-        'expense_series': json.dumps(expense_series),
-        #'cat_name_series': json.dumps(cat_name_series),
-    })
 
