@@ -15,5 +15,5 @@ urlpatterns = [
     path('addincome', views.addincome, name='addincome'),
     path('addexpense', views.addexpense, name='addexpense'),
     path('transaction', views.transaction, name='transaction'),
-    
+    path('export-csv', views.export_csv, name='export_csv'),
 ]
