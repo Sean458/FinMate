@@ -24,3 +24,4 @@ class Transaction(models.Model):
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True,)
     country = models.CharField(max_length=30)
+    credit_score = models.FloatField(default=0.0)

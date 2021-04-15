@@ -128,6 +128,7 @@ def register(request):
         lastName = request.POST['lastName']
         email = request.POST['email']
         username = request.POST['userName']
+        country=request.POST['country']
         password = request.POST['password']
         confirmPassword = request.POST['confirmPassword']
         if password != confirmPassword:
@@ -146,6 +147,9 @@ def register(request):
                 user = User.objects.create_user(
                     username=username, password=password, email=email, first_name=firstName, last_name=lastName)
                 user.save()
+                cust = CustomUser(user_id=user.id,country=country)
+                cust.save()
+
                 # messages.success(request, "Registration Successful!")
                 return redirect("/users/login")
 
@@ -276,6 +280,9 @@ def transaction(request):
         #print("Score", score)
         compound = score.get('compound')
         #print("compound", compound)
+
+
+        
 
         newtransaction = Transaction(
             user=request.user, category=catobj, amount=amount, date=date, feedback=feedback, sentiment=compound)
