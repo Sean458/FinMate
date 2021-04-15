@@ -28,8 +28,23 @@ def index(request):
       #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
       #  .group_by('VehicleID') \
       #  .order_by('VehicleID')    
-
     usd=request.user.id
+    c=CustomUser.objects.raw('SELECT user_id from management_customuser where user_id=%s',[usd])
+    percentile=0.0
+    for entry in c:
+        queryset = CustomUser.objects.all()
+        total_count = queryset.count()
+        if total_count:
+            percentile = float(queryset.filter(credit_score__lt=entry.credit_score).count())/total_count
+        else:
+            percentile= 0.0
+        #print('percentile',percentile)
+    percentile=percentile*100
+
+
+
+
+    
 
     categories = list()
     date_series = list()
@@ -118,7 +133,8 @@ def index(request):
         'ind':ind,
         'usa':usa,
         'uk':uk,
-        'china':china,})
+        'china':china,
+        'percentile':percentile,})
 
 
 
