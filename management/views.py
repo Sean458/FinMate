@@ -280,14 +280,41 @@ def transaction(request):
         #print("Score", score)
         compound = score.get('compound')
         #print("compound", compound)
-
+        
+        usd=request.user.id
+        
 
         
+
+
 
         newtransaction = Transaction(
             user=request.user, category=catobj, amount=amount, date=date, feedback=feedback, sentiment=compound)
 
         newtransaction.save()
+
+        arr=[]
+    
+        income=Transaction.objects.raw('SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s',[usd])
+        for i in income:
+            arr.append(i.amount)
+            
+        expenses=Transaction.objects.raw('SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s',[usd])
+        for i in expenses:
+            arr.append(i.amount)
+        if arr[0]!=None and arr[1]!=None:
+            savings=arr[0]-arr[1]
+        else:
+            savings=None
+
+
+        cred_score=savings/arr[0]
+        print('credscore',cred_score)
+        cust = CustomUser.objects.get(user_id=request.user.id)
+        cust.credit_score=cred_score
+        
+        cust.save(update_fields=['credit_score'])
+
         return redirect('/transaction')
     else:
 
