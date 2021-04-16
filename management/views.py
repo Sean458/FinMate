@@ -274,10 +274,14 @@ def addexpense(request):
 
 
 def transaction(request):
+    cat=0
     if request.method == "POST":
         catid = request.POST.get('catid')
-        # print(catid)
+        cat=catid
         catobj = Category.objects.get(pk=catid)
+        cat_name=str(catobj)
+        cat_name=cat_name[4:]
+        print('cat_name',cat_name[4:])
         amount = request.POST.get('amount')
         # print(amount)
         date = request.POST.get('date')
@@ -303,34 +307,10 @@ def transaction(request):
 
         newtransaction.save()
 
-        arr = []
-
-        income = Transaction.objects.raw(
-            'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
-        for i in income:
-            arr.append(i.amount)
-
-        expenses = Transaction.objects.raw(
-            'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
-        for i in expenses:
-            arr.append(i.amount)
-        if arr[0] != None and arr[1] != None:
-            savings = arr[0]-arr[1]
-        else:
-            savings = None
-
-        cred_score = savings/arr[0]
-        print('credscore', cred_score)
-        cust = CustomUser.objects.get(user_id=request.user.id)
-        cust.credit_score = cred_score
-
-        cust.save(update_fields=['credit_score'])
-
-        return redirect('/transaction')
-    else:
-
+        usd = request.user.id
+        print('cat',cat)
         dataset1 = Transaction.objects.raw(
-            'SELECT distinct(id), user_id,feedback FROM management_transaction ')
+            'select id,category_id,feedback from management_transaction where user_id=%s and category_id=%s',[usd,cat])
 
         review = list()
         for entry in dataset1:
@@ -358,10 +338,36 @@ def transaction(request):
         alltransaction = Transaction.objects.filter(user=request.user)
         if total < -0.2:
 
-            return render(request, 'addtransaction.html', {'alert_flag': True})
-        else:
+            return render(request, 'addtransaction.html', {'alert_flag': True,'cat_name':cat_name})
 
-            return render(request, "transaction.html", {'alltransaction': alltransaction})
+        arr = []
+
+        income = Transaction.objects.raw(
+            'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
+        for i in income:
+            arr.append(i.amount)
+
+        expenses = Transaction.objects.raw(
+            'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
+        for i in expenses:
+            arr.append(i.amount)
+        if arr[0] != None and arr[1] != None:
+            savings = arr[0]-arr[1]
+        else:
+            savings = None
+
+        cred_score = savings/arr[0]
+        print('credscore', cred_score)
+        cust = CustomUser.objects.get(user_id=request.user.id)
+        cust.credit_score = cred_score
+
+        cust.save(update_fields=['credit_score'])
+
+        return redirect('/transaction')
+    else:
+ 
+        alltransaction = Transaction.objects.filter(user=request.user)
+        return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 
 def export_csv(request):
