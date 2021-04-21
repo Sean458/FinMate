@@ -1,756 +1,356 @@
-{% load static %}
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <base href="/">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/assets/images/favicon.png' %}">
-    <title>FinMate</title>
-    <!-- Custom CSS -->
-    <link href="{% static '/assets/extra-libs/c3/c3.min.css'%}" rel="stylesheet">
-    <link href="{% static '/assets/libs/chartist/dist/chartist.min.css'%}" rel="stylesheet">
-    <link href="{% static '/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css'%}" rel="stylesheet" />
-    <!-- Custom CSS -->
-    <link href="{% static '/dist/css/style.min.css'%}" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-</head>
+{% block title %}Finmate{% endblock title %}
 
-<body>
+{% block body %}
+<!-- ============================================================== -->
+<!-- Page wrapper  -->
+<!-- ============================================================== -->
+<div class="page-wrapper">
     <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
+    <!-- Bread crumb and right sidebar toggle -->
     <!-- ============================================================== -->
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-7 align-self-center">
 
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0 p-0">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
         </div>
     </div>
     <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- End Bread crumb and right sidebar toggle -->
     <!-- ============================================================== -->
-    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <header class="topbar" data-navbarbg="skin6">
-            <nav class="navbar top-navbar navbar-expand-md">
-                <div class="navbar-header" data-logobg="skin6">
-                    <!-- This is for the sidebar toggle which is visible on mobile only -->
-                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)void"><i
-                            class="ti-menu ti-close"></i></a>
-                    <!-- ============================================================== -->
-                    <!-- Logo -->
-                    <!-- ============================================================== -->
-                    <div class="navbar-brand">
-                        <!-- Logo icon -->
-                        <a href="/">
-
-                            <!--End Logo icon -->
-                            <!-- Logo text -->
-                            <span class="logo-text">
-                                <!-- dark Logo text -->
-                                <img src="{% static '/assets/images/logo-text.png'%}" alt="homepage"
-                                    class="dark-logo" />
-                                <!-- Light Logo text -->
-
-                            </span>
-                        </a>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- End Logo -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Toggle which is visible on mobile only -->
-                    <!-- ============================================================== -->
-                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
-                        data-toggle="collapse" data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
-                            class="ti-more"></i></a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse collapse" id="navbarSupportedContent">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
-                        <!-- Notification -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle pl-md-3 position-relative" href="javascript:void(0)"
-                                id="bell" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <span><i data-feather="bell" class="svg-icon"></i></span>
-                                <span class="badge badge-primary notify-no rounded-circle">5</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-left mailbox animated bounceInDown">
-                                <ul class="list-style-none">
-                                    <li>
-                                        <div class="message-center notifications position-relative">
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)"
-                                                class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                <div class="btn btn-danger rounded-circle btn-circle"><i
-                                                        data-feather="airplay" class="text-white"></i></div>
-                                                <div class="w-75 d-inline-block v-middle pl-2">
-                                                    <h6 class="message-title mb-0 mt-1">Launch Admin</h6>
-                                                    <span class="font-12 text-nowrap d-block text-muted">Just see
-                                                        the new
-                                                        admin!</span>
-                                                    <span class="font-12 text-nowrap d-block text-muted">9:30 AM</span>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)"
-                                                class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                <span class="btn btn-success text-white rounded-circle btn-circle"><i
-                                                        data-feather="calendar" class="text-white"></i></span>
-                                                <div class="w-75 d-inline-block v-middle pl-2">
-                                                    <h6 class="message-title mb-0 mt-1">Event today</h6>
-                                                    <span
-                                                        class="font-12 text-nowrap d-block text-muted text-truncate">Just
-                                                        a reminder that you have event</span>
-                                                    <span class="font-12 text-nowrap d-block text-muted">9:10 AM</span>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="{% static 'javascript:void(0)' %}"
-                                                class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                <span class="btn btn-info rounded-circle btn-circle"><i
-                                                        data-feather="settings" class="text-white"></i></span>
-                                                <div class="w-75 d-inline-block v-middle pl-2">
-                                                    <h6 class="message-title mb-0 mt-1">Settings</h6>
-                                                    <span
-                                                        class="font-12 text-nowrap d-block text-muted text-truncate">You
-                                                        can customize this template
-                                                        as you want</span>
-                                                    <span class="font-12 text-nowrap d-block text-muted">9:08 AM</span>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="{% static 'javascript:void(0)' %}"
-                                                class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                <span class="btn btn-primary rounded-circle btn-circle"><i
-                                                        data-feather="box" class="text-white"></i></span>
-                                                <div class="w-75 d-inline-block v-middle pl-2">
-                                                    <h6 class="message-title mb-0 mt-1">Pavan kumar</h6> <span
-                                                        class="font-12 text-nowrap d-block text-muted">Just
-                                                        see the my admin!</span>
-                                                    <span class="font-12 text-nowrap d-block text-muted">9:02 AM</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link pt-3 text-center text-dark"
-                                            href="{% static 'javascript:void(0)' %}">
-                                            <strong>Check all notifications</strong>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- End Notification -->
-                        <!-- ============================================================== -->
-                        <!-- create new -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i data-feather="settings" class="svg-icon"></i>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
-                        <li class="nav-item d-none d-md-block">
-                            <a class="nav-link" href="{% static 'javascript:void(0)' %}">
-                                <div class="customize-input">
-                                    <select
-                                        class="custom-select form-control bg-white custom-radius custom-shadow border-0">
-                                        <option selected>EN</option>
-                                        <option value="1">AB</option>
-                                        <option value="2">AK</option>
-                                        <option value="3">BE</option>
-                                    </select>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- Right side toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-right">
-                        <!-- ============================================================== -->
-                        <!-- Search -->
-                        <!-- ============================================================== -->
-
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{% static 'javascript:void(0)' %}"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-
-
-                                {% if request.user.is_anonymous %}
-
-
-                                <span class="ml-2 d-none d-lg-inline-block"><span>Login</span> <span
-                                        class="text-dark">Here</span> <i data-feather="chevron-down"
-                                        class="svg-icon"></i></span>
-
-                                {% else %}
-                                <img src="{% static '/assets/images/users/profile-pic.jpg' %}" alt="user"
-                                    class="rounded-circle" width="40">
-
-                                <span class="ml-2 d-none d-lg-inline-block"><span>Welcome,</span> <span
-                                        class="text-dark">{{ request.user.username }}</span> <i
-                                        data-feather="chevron-down" class="svg-icon"></i></span>
-
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <!-- *************************************************************** -->
+        <!-- Start First Cards -->
+        <!-- *************************************************************** -->
+        <div class="card-group">
+            <div class="card border-right">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <div class="d-inline-flex align-items-center">
+                                {% if savings %}
+                                <h2 class="text-dark mb-1 font-weight-medium"><sup class="set-doller">₹</sup>
+                                    {{ savings }}</h2>
                                 {% endif %}
 
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
-                                <a class="dropdown-item" href="{% static 'javascript:void(0)'%}"><i data-feather="user"
-                                        class="svg-icon mr-2 ml-1"></i>
-                                    My Profile</a>
-                                <a class="dropdown-item" href="{% static 'javascript:void(0)'%}"><i
-                                        data-feather="credit-card" class="svg-icon mr-2 ml-1"></i>
-                                    My Balance</a>
-                                <a class="dropdown-item" href="{% static 'javascript:void(0)'%}"><i data-feather="mail"
-                                        class="svg-icon mr-2 ml-1"></i>
-                                    Inbox</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% static 'javascript:void(0)'%}"><i
-                                        data-feather="settings" class="svg-icon mr-2 ml-1"></i>
-                                    Account Setting</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% static 'javascript:void(0)'%}"><i data-feather="power"
-                                        class="svg-icon mr-2 ml-1"></i>
-                                    Logout</a>
-                                <div class="dropdown-divider"></div>
-                                <div class="pl-4 p-3"><a href="{% static 'javascript:void(0)'%}"
-                                        class="btn btn-sm btn-info">View
-                                        Profile</a></div>
                             </div>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin6">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar" data-sidebarbg="skin6">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav">
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="/" aria-expanded="false"><i
-                                    data-feather="home" class="feather-icon"></i><span
-                                    class="hide-menu">Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="/transaction"
-                                aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
-                                    class="hide-menu">Transaction</span></a></li>
-
-
-
-                        <li class="list-divider"></li>
-                        <li class="nav-small-cap"><span class="hide-menu">Components</span></li>
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow"
-                                href="{% static 'javascript:void(0)'%}" aria-expanded="false"><i
-                                    data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">Categories</span></a>
-                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
-                                <li class="sidebar-item"><a href="/categories/income" class="sidebar-link"><span
-                                            class="hide-menu">
-                                            Income
-                                        </span></a>
-                                </li>
-                                <li class="sidebar-item"><a href="/categories/expense" class="sidebar-link"><span
-                                            class="hide-menu"> Expense
-                                        </span></a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- <li class="sidebar-item"> <a class="sidebar-link" href="ticket-list.html"
-                                aria-expanded="false"><i data-feather="tag" class="feather-icon"></i><span
-                                    class="hide-menu">Add transaction
-                                </span></a>
-                        </li> -->
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow"
-                                href="{% static 'javascript:void(0)'%}" aria-expanded="false"><i
-                                    data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">Transaction</span></a>
-                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
-                                <li class="sidebar-item"><a href="/addincome" class="sidebar-link"><span
-                                            class="hide-menu">
-                                            Add Income
-                                        </span></a>
-                                </li>
-                                <li class="sidebar-item"><a href="/addexpense" class="sidebar-link"><span
-                                            class="hide-menu"> Add Expense
-                                        </span></a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="list-divider"></li>
-                        <li class="nav-small-cap"><span class="hide-menu">Authentication</span></li>
-
-                        {% if request.user.is_anonymous %}
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="users/login"
-                                aria-expanded="false"><i data-feather="lock" class="feather-icon"></i><span
-                                    class="hide-menu">Login
-                                </span></a>
-                        </li>
-
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="users/register"
-                                aria-expanded="false"><i data-feather="lock" class="feather-icon"></i><span
-                                    class="hide-menu">Register
-                                </span></a>
-                        </li>
-                        {% else %}
-
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="users/logout"
-                                aria-expanded="false"><i data-feather="log-out" class="feather-icon"></i><span
-                                    class="hide-menu">Logout</span></a></li>
-
-
-                        {% endif %}
-
-
-
-
-
-                    </ul>
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-7 align-self-center">
-
-                        <div class="d-flex align-items-center">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb m-0 p-0">
-                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a>
-                                    </li>
-                                </ol>
-                            </nav>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Savings</h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <!-- *************************************************************** -->
-                <!-- Start First Cards -->
-                <!-- *************************************************************** -->
-                <div class="card-group">
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <div class="d-inline-flex align-items-center">
-                                        {% if savings %}
-                                        <h2 class="text-dark mb-1 font-weight-medium"><sup class="set-doller">₹</sup>
-                                            {{ savings }}</h2>
-                                        {% endif %}
-
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Savings</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
-                                </div>
-                            </div>
+            <div class="card border-right">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            {% for post in income %}
+                            <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
+                                    class="set-doller">₹</sup>{{ post.amount }}</h2>
+                            {% endfor %}
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Earnings of Month
+                            </h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
                         </div>
                     </div>
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    {% for post in income %}
-                                    <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                            class="set-doller">₹</sup>{{ post.amount }}</h2>
-                                    {% endfor %}
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Earnings of Month
-                                    </h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
-                                </div>
+                </div>
+            </div>
+            <div class="card border-right">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <div class="d-inline-flex align-items-center">
+                                {% for post in expenses %}
+
+                                <h2 class="text-dark mb-1 font-weight-medium"><sup class="set-doller">₹</sup>
+                                    {{ post.amount }}</h2>
+                                {% endfor %}
+
                             </div>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Expenses</h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
                         </div>
                     </div>
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <div class="d-inline-flex align-items-center">
-                                        {% for post in expenses %}
-
-                                        <h2 class="text-dark mb-1 font-weight-medium"><sup class="set-doller">₹</sup>
-                                            {{ post.amount }}</h2>
-                                        {% endfor %}
-
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Expenses</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <h2 class="text-dark mb-1 font-weight-medium"><sup
+                                    class="set-doller">Top</sup>{{percentile}}</h2>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Percentile (Credit score)
+                            </h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <h2 class="text-dark mb-1 font-weight-medium"><sup class="set-doller">Top</sup>{{percentile}}</h2>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Percentile (Credit score)</h6>
+                </div>
+            </div>
+        </div>
+        <!-- *************************************************************** -->
+        <!-- End First Cards -->
+        <!-- *************************************************************** -->
+        <!-- *************************************************************** -->
+        <!-- Start Sales Charts Section -->
+        <!-- *************************************************************** -->
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+
+                        <h4 class="card-title">Total Transactions</h4>
+                        <div id="container1"></div>
+                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                        <script>
+                            Highcharts.chart('container1', {
+                                chart: {
+                                    type: 'pie'
+                                },
+                                title: {
+                                    text: 'Transactions'
+                                },
+                                xAxis: {
+                                    categories: {{ categories| safe }}
+                                    },
+                                plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: false,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
+
+                                series: [{
+                                    name: 'Transactions',
+                                    data: {{ amount_series }},
+                                colorByPoint: true,
+                                    }] 
+                                  });
+                        </script>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="card-title">Total Expense</h4>
+                        <div id="container2"></div>
+                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                        <script>
+                            Highcharts.chart('container2', {
+                                chart: {
+                                    type: 'line'
+                                },
+                                title: {
+                                    text: 'User Expense'
+                                },
+                                xAxis: {
+                                    categories: {{ categories| safe }}
+                                    },
+
+                                series: [{
+                                    name: "Expense Incurred",
+                                    data: {{ expense_series }},
+                                color: 'red'
+                                    }] 
+                                  });
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Users by Location</h4>
+                        <div class="" style="height:180px">
+                            <div id="visitbylocate" style="height:100%"></div>
+                        </div>
+                        <div class="row mb-3 align-items-center mt-1 mt-5">
+                            <div class="col-4 text-right">
+                                <span class="text-muted font-14">India</span>
+                            </div>
+                            <div class="col-5">
+                                <div class="progress" style="height: 5px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ind}}%"
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
+                            </div>
+                            <div class="col-3 text-right">
+                                <span class="mb-0 font-14 text-dark font-weight-medium">{{ind}}%</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4 text-right">
+                                <span class="text-muted font-14">UK</span>
+                            </div>
+                            <div class="col-5">
+                                <div class="progress" style="height: 5px;">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{uk}}%"
+                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
+                            </div>
+                            <div class="col-3 text-right">
+                                <span class="mb-0 font-14 text-dark font-weight-medium">{{uk}}%</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4 text-right">
+                                <span class="text-muted font-14">USA</span>
+                            </div>
+                            <div class="col-5">
+                                <div class="progress" style="height: 5px;">
+                                    <div class="progress-bar bg-cyan" role="progressbar" style="width: {{usa}}%"
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-3 text-right">
+                                <span class="mb-0 font-14 text-dark font-weight-medium">{{usa}}%</span>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-4 text-right">
+                                <span class="text-muted font-14">China</span>
+                            </div>
+                            <div class="col-5">
+                                <div class="progress" style="height: 5px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{china}}%"
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-3 text-right">
+                                <span class="mb-0 font-14 text-dark font-weight-medium">{{china}}%</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- *************************************************************** -->
-                <!-- End First Cards -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Sales Charts Section -->
-                <!-- *************************************************************** -->
-                <div class="row">
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-
-
-                                <h4 class="card-title">Total Transactions</h4>
-                                <div id="container1"></div>
-                                <script src="https://code.highcharts.com/highcharts.src.js"></script>
-                                <script>
-                                    Highcharts.chart('container1', {
-                                        chart: {
-                                            type: 'pie'
-                                        },
-                                        title: {
-                                            text: 'Transactions'
-                                        },
-                                        xAxis: {
-                                            categories: {{ categories| safe }}
-                                    },
-                                        plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            dataLabels: {
-                                                enabled: false,
-                                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                                            }
-                                        }
-                                    },
-
-                                        series: [{
-                                            name: 'Transactions',
-                                            data: {{ amount_series }},
-                                        colorByPoint: true,
-                                    }] 
-                                  });
-                                </script>
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <h4 class="card-title">Total Expense</h4>
-                                <div id="container2"></div>
-                                <script src="https://code.highcharts.com/highcharts.src.js"></script>
-                                <script>
-                                    Highcharts.chart('container2', {
-                                        chart: {
-                                            type: 'line'
-                                        },
-                                        title: {
-                                            text: 'User Expense'
-                                        },
-                                        xAxis: {
-                                            categories: {{ categories| safe }}
-                                    },
-
-                                        series: [{
-                                            name: "Expense Incurred",
-                                            data: {{ expense_series }},
-                                        color: 'red'
-                                    }] 
-                                  });
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Users by Location</h4>
-                                <div class="" style="height:180px">
-                                    <div id="visitbylocate" style="height:100%"></div>
-                                </div>
-                                <div class="row mb-3 align-items-center mt-1 mt-5">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">India</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ind}}%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">{{ind}}%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">UK</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{uk}}%"
-                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">{{uk}}%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">USA</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-cyan" role="progressbar" style="width: {{usa}}%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">{{usa}}%</span>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">China</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: {{china}}%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">{{china}}%</span>
+            </div>
+        </div>
+        <!-- *************************************************************** -->
+        <!-- End Sales Charts Section -->
+        <!-- *************************************************************** -->
+        <!-- *************************************************************** -->
+        <!-- Start Location and Earnings Charts Section -->
+        <!-- *************************************************************** -->
+        <div class="row">
+            <div class="col-md-6 col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start">
+                            <h4 class="card-title mb-0">Earning Statistics</h4>
+                            <div class="ml-auto">
+                                <div class="dropdown sub-dropdown">
+                                    <button class="btn btn-link text-muted dropdown-toggle" type="button" id="dd1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i data-feather="more-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
+                                        <a class="dropdown-item" href="#">Insert</a>
+                                        <a class="dropdown-item" href="#">Update</a>
+                                        <a class="dropdown-item" href="#">Delete</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- *************************************************************** -->
-                <!-- End Sales Charts Section -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Location and Earnings Charts Section -->
-                <!-- *************************************************************** -->
-                <div class="row">
-                    <div class="col-md-6 col-lg-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <h4 class="card-title mb-0">Earning Statistics</h4>
-                                    <div class="ml-auto">
-                                        <div class="dropdown sub-dropdown">
-                                            <button class="btn btn-link text-muted dropdown-toggle" type="button"
-                                                id="dd1" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
-                                                <a class="dropdown-item" href="#">Insert</a>
-                                                <a class="dropdown-item" href="#">Update</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pl-4 mb-5">
-                               
-                                <div id="container3"></div>
-                                <script src="https://code.highcharts.com/highcharts.src.js"></script>
-                                <script>
-                                    Highcharts.chart('container3', {
-                                        chart: {
-                                            type: 'areaspline'
-                                        },
-                                        title: {
-                                            text: 'User Income'
-                                        },
-                                        xAxis: {
-                                            categories: {{ categories| safe }}
-                                    },
-                                        plotOptions: {
-                                            areaspline: {
-                                            fillOpacity: 0.5
-                                            }
-                                        },
+                        <div class="pl-4 mb-5">
 
-                                        series: [{
-                                            name: "Income earned",
-                                            data: {{ income_series }},
+                            <div id="container3"></div>
+                            <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                            <script>
+                                Highcharts.chart('container3', {
+                                    chart: {
+                                        type: 'areaspline'
+                                    },
+                                    title: {
+                                        text: 'User Income'
+                                    },
+                                    xAxis: {
+                                        categories: {{ categories| safe }}
+                                    },
+                                    plotOptions: {
+                                    areaspline: {
+                                        fillOpacity: 0.5
+                                    }
+                                },
+
+                                    series: [{
+                                        name: "Income earned",
+                                        data: {{ income_series }},
                                         
                                     }] 
                                   });
-                                </script>
-                                </div>
-                                <ul class="list-inline text-center mt-4 mb-0">
-                                    <li class="list-inline-item text-muted font-italic">Earnings for this month</li>
-                                </ul>
-                            </div>
+                            </script>
                         </div>
+                        <ul class="list-inline text-center mt-4 mb-0">
+                            <li class="list-inline-item text-muted font-italic">Earnings for this month</li>
+                        </ul>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Recent Activity</h4>
-                                <div class="mt-4 activity">
-                                    <div class="d-flex align-items-start border-left-line pb-3">
-                                        <div>
-                                            <a href="transaction"
-                                                class="btn btn-info btn-circle mb-2 btn-item">
-                                                <i data-feather="shopping-cart"></i>
-                                            </a>
-                                        </div>
-
-                                    </div>
-
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Recent Activity</h4>
+                        <div class="mt-4 activity">
+                            <div class="d-flex align-items-start border-left-line pb-3">
+                                <div>
+                                    <a href="transaction" class="btn btn-info btn-circle mb-2 btn-item">
+                                        <i data-feather="shopping-cart"></i>
+                                    </a>
                                 </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
-                <!-- *************************************************************** -->
-                <!-- End Location and Earnings Charts Section -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Top Leader Table -->
-                <!-- *************************************************************** -->
-
-                <!-- *************************************************************** -->
-                <!-- End Top Leader Table -->
-                <!-- *************************************************************** -->
             </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-
-            <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-            <df-messenger intent="WELCOME" chat-title="Finmate" agent-id="887f209d-ff0b-435c-be95-97693429aae2"
-                language-code="en"></df-messenger>
-            <footer class="footer text-center text-muted">
-                All Rights Reserved by FinMate. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
-            </footer>
-            <!-- ============================================================== -->
-            <!-- End footer -->
-            <!-- ============================================================== -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
+        <!-- *************************************************************** -->
+        <!-- End Location and Earnings Charts Section -->
+        <!-- *************************************************************** -->
+        <!-- *************************************************************** -->
+        <!-- Start Top Leader Table -->
+        <!-- *************************************************************** -->
+
+        <!-- *************************************************************** -->
+        <!-- End Top Leader Table -->
+        <!-- *************************************************************** -->
     </div>
     <!-- ============================================================== -->
-    <!-- End Wrapper -->
+    <!-- End Container fluid  -->
     <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="{% static '/assets/libs/jquery/dist/jquery.min.js'%}"></script>
-    <script src="{% static '/assets/libs/popper.js/dist/umd/popper.min.js'%}"></script>
-    <script src="{% static '/assets/libs/bootstrap/dist/js/bootstrap.min.js'%}"></script>
-    <!-- apps -->
-    <!-- apps -->
-    <script src="{% static '/dist/js/app-style-switcher.js'%}"></script>
-    <script src="{% static '/dist/js/feather.min.js'%}"></script>
-    <script src="{% static '/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js'%}"></script>
-    <script src="{% static '/dist/js/sidebarmenu.js'%}"></script>
-    <!--Custom JavaScript -->
-    <script src="{% static '/dist/js/custom.min.js'%}"></script>
-    <!--This page JavaScript -->
-    <script src="{% static '/assets/extra-libs/c3/d3.min.js'%}"></script>
-    <script src="{% static '/assets/extra-libs/c3/c3.min.js'%}"></script>
-    <script src="{% static '/assets/libs/chartist/dist/chartist.min.js'%}"></script>
-    <script src="{% static '/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js'%}"></script>
-    <script src="{% static '/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js'%}"></script>
-    <script src="{% static '/assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js'%}"></script>
-    <script src="{% static '/dist/js/pages/dashboards/dashboard1.min.js'%}"></script>
-</body>
 
-</html>
+
+    {% endblock body %}

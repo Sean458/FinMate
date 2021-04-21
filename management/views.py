@@ -274,14 +274,14 @@ def addexpense(request):
 
 
 def transaction(request):
-    cat=0
+    cat = 0
     if request.method == "POST":
         catid = request.POST.get('catid')
-        cat=catid
+        cat = catid
         catobj = Category.objects.get(pk=catid)
-        cat_name=str(catobj)
-        cat_name=cat_name[4:]
-        print('cat_name',cat_name[4:])
+        cat_name = str(catobj)
+        cat_name = cat_name[4:]
+        print('cat_name', cat_name[4:])
         amount = request.POST.get('amount')
         # print(amount)
         date = request.POST.get('date')
@@ -308,9 +308,9 @@ def transaction(request):
         newtransaction.save()
 
         usd = request.user.id
-        print('cat',cat)
+        print('cat', cat)
         dataset1 = Transaction.objects.raw(
-            'select id,category_id,feedback from management_transaction where user_id=%s and category_id=%s',[usd,cat])
+            'select id,category_id,feedback from management_transaction where user_id=%s and category_id=%s', [usd, cat])
 
         review = list()
         for entry in dataset1:
@@ -338,7 +338,7 @@ def transaction(request):
         alltransaction = Transaction.objects.filter(user=request.user)
         if total < -0.2:
 
-            return render(request, 'addtransaction.html', {'alert_flag': True,'cat_name':cat_name})
+            return render(request, 'addtransaction.html', {'alert_flag': True, 'cat_name': cat_name})
 
         arr = []
 
@@ -365,8 +365,9 @@ def transaction(request):
 
         return redirect('/transaction')
     else:
- 
-        alltransaction = Transaction.objects.filter(user=request.user)
+
+        alltransaction = Transaction.objects.filter(
+            user=request.user)
         return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 

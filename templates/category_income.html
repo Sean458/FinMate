@@ -1,65 +1,74 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}Category Income{% endblock title %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
-    <title>Category Income</title>
-</head>
+{% block body %}
 
-<body>
-    <div class="container mt-5">
+ <div class="page-wrapper">
 
-        <h4 class="text-center alert alert-info">Add/Update Income Category</h4>
+    <div class="page-breadcrumb">
 
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="input-group">
-                <input type="hidden" name="catid" id="catid">
-                <input type="hidden" value="income" id="ctype">
-                <input type="text" class="form-control" placeholder="Category" id="cat">
-                <input type="button" class="btn btn-success" id="btnsave" value="Save">
+
+        <div class="container-fluid mt-5">
+
+            <h4 class="text-center alert alert-info">Add/Update Income Category</h4>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="hidden" name="catid" id="catid">
+                    <input type="hidden" value="income" id="ctype">
+                    <input type="text" class="form-control" placeholder="Category" id="cat">
+                    <input type="button" class="btn btn-success" id="btnsave" value="Save">
+                </div>
+            </form>
+
+            <div class="mt-5">
+                <div id="msg" class="mt-4 alert alert-secondary" style="display:none"></div>
+                <h4 class="text-center alert alert-info">Availabe Income Categories</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody" id="tbody">
+                        {% for category in category_list%}
+                        <tr>
+                            <td>
+                                {{category.category_name}}
+                            </td>
+                            <td>
+                                <input type="button" data-cid="{{category.id}}" class="btn btn-warning btn-sm btn-edit"
+                                    value="Edit">
+                                <input type="button" data-cid="{{category.id}}" class="btn btn-danger btn-sm btn-del"
+                                    value="Delete">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </form>
 
-        <div class="mt-5">
-            <div id="msg" class="mt-4 alert alert-secondary" style="display:none"></div>
-            <h4 class="text-center alert alert-info">Availabe Income Categories</h4>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Category</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody" id="tbody">
-                    {% for category in category_list%}
-                    <tr>
-                        <td>
-                            {{category.category_name}}
-                        </td>
-                        <td>
-                            <input type="button" data-cid="{{category.id}}" class="btn btn-warning btn-sm btn-edit"
-                                value="Edit">
-                            <input type="button" data-cid="{{category.id}}" class="btn btn-danger btn-sm btn-del"
-                                value="Delete">
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
-
     </div>
+
+
+
+</div> 
+
+    {% endblock body %}
+
+{% comment %} {% block scripts %}
 
     <script src="{% static '/js/jquery.js' %}"></script>
     <script src="{% static '/js/popper.js' %}"></script>
     <script src="{% static '/js/bootstrap.js' %}"></script>
+    {% endblock scripts %}   {% endcomment %}
+    
+     {% block ajaxhtml %}
 
-    {% include "ajax.html" %}
+        {% include "ajax.html" %}
 
-</body>
-
-</html>
+      {% endblock ajaxhtml %}
