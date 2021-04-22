@@ -10,6 +10,7 @@ from .models import Category, Transaction, CustomUser
 from django.http import JsonResponse, HttpResponse
 import json
 
+from django.utils.dateparse import parse_date
 import datetime
 import csv
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -24,6 +25,7 @@ def home(request):
 def index(request):
     dataset = Transaction.objects.raw(
         'SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
+    # print(dataset)
     dataset2 = Transaction.objects.raw(
         'SELECT management_transaction.id,management_transaction.user_id, management_transaction.amount ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1')
     dataset3 = Transaction.objects.raw(
@@ -37,6 +39,7 @@ def index(request):
     usd = request.user.id
     c = CustomUser.objects.raw(
         'SELECT user_id from management_customuser where user_id=%s', [usd])
+    print(c)
     percentile = 0.0
     for entry in c:
         queryset = CustomUser.objects.all()
@@ -365,24 +368,45 @@ def transaction(request):
 
         return redirect('/transaction')
     else:
-
+        print(request.GET)
+        # print(request.GET.get('startdate'))
+        # print(request.GET.get('enddate'))
+        # print(type(request.GET.get('startdate')))
+        # print(type(request.GET.get('enddate')))
+        # startdate = parse_date(request.GET.get('startdate'))
+        # enddate = parse_date(request.GET.get('enddate'))
+        # startdate = request.GET.get('startdate')
+        # enddate = request.GET.get('enddate')
+        # print(type(startdate))
+        # print(type(enddate))
+        # print(startdate)
+        # print(enddate)
         alltransaction = Transaction.objects.filter(
             user=request.user)
         return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 
-def export_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=Expenses' + \
-        str(datetime.datetime.now())+'.csv'
+def export(request):
+    if request.method == "POST":
+        startdate = request.POST.get('startdate')
+        enddate = request.POST.get('enddate')
+        print(startdate)
+        print(enddate)
 
-    writer = csv.writer(response)
-    writer.writerow(['Category', 'Amount', 'Date', 'Feedback'])
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=Expenses' + \
+            str(datetime.datetime.now())+'.csv'
 
-    transactions = Transaction.objects.filter(user=request.user)
+        writer = csv.writer(response)
+        writer.writerow(['Category', 'Amount', 'Date', 'Feedback'])
 
-    for transaction in transactions:
-        writer.writerow([transaction.category.category_name, transaction.amount,
-                         transaction.date, transaction.feedback])
+        transactions = Transaction.objects.filter(
+            user=request.user, date__range=[startdate, enddate])
 
-    return response
+        for transaction in transactions:
+            writer.writerow([transaction.category.category_name, transaction.amount,
+                             transaction.date, transaction.feedback])
+
+        return response
+    else:
+        return render(request, "export.html")

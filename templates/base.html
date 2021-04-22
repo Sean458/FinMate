@@ -183,7 +183,7 @@
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                         </li>
-                        <li class="nav-item d-none d-md-block">
+                        <!-- <li class="nav-item d-none d-md-block">
                             <a class="nav-link" href="{% static 'javascript:void(0)' %}">
                                 <div class="customize-input">
                                     <select
@@ -195,7 +195,7 @@
                                     </select>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                     <!-- ============================================================== -->
                     <!-- Right side toggle and nav items -->
@@ -247,7 +247,7 @@
                                         data-feather="settings" class="svg-icon mr-2 ml-1"></i>
                                     Account Setting</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% static 'javascript:void(0)'%}"><i data-feather="power"
+                                <a class="dropdown-item" href="users/logout"><i data-feather="power"
                                         class="svg-icon mr-2 ml-1"></i>
                                     Logout</a>
                                 <div class="dropdown-divider"></div>
@@ -275,13 +275,15 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="/" aria-expanded="false"><i
-                                    data-feather="home" class="feather-icon"></i><span
+                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="/index"
+                                aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
                                     class="hide-menu">Dashboard</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="/transaction"
                                 aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
-                                    class="hide-menu">Transaction</span></a></li>
-
+                                    class="hide-menu">Transactions</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="/export"
+                                aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
+                                    class="hide-menu">Export</span></a></li>
 
 
                         <li class="list-divider"></li>
@@ -310,7 +312,7 @@
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow"
                                 href="{% static 'javascript:void(0)'%}" aria-expanded="false"><i
                                     data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">Transaction</span></a>
+                                    class="hide-menu">Transactions</span></a>
                             <ul aria-expanded="false" class="collapse  first-level base-level-line">
                                 <li class="sidebar-item"><a href="/addincome" class="sidebar-link"><span
                                             class="hide-menu">
