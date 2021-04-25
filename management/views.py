@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
-from .models import Category, Transaction, CustomUser
+from .models import Category, Notification, Transaction, CustomUser
 from django.http import JsonResponse, HttpResponse
 import json
 
@@ -39,14 +39,16 @@ def index(request):
     usd = request.user.id
     c = CustomUser.objects.raw(
         'SELECT user_id from management_customuser where user_id=%s', [usd])
-    print(c)
+    # print(c)
     percentile = 0.0
     for entry in c:
+        print(entry.user_id)
         queryset = CustomUser.objects.all()
         total_count = queryset.count()
         if total_count:
             percentile = float(queryset.filter(
                 credit_score__lt=entry.credit_score).count())/total_count
+            print(percentile)
         else:
             percentile = 0.0
         # print('percentile',percentile)
@@ -82,13 +84,15 @@ def index(request):
     usa = int((usa/cnt)*100)
     uk = int((uk/cnt)*100)
     china = int((china/cnt)*100)
-    # print(ind,usa,uk,china)
+    print(ind, usa, uk, china)
 
     for entry in dataset:
+        # print(entry.id, entry.total_amount, entry.date)
         uid = Transaction.objects.get(pk=entry.id)
         name = uid.user_id
         if name == usd:
             amount_series.append((int)(entry.total_amount))
+            # print(amount_series)
 
     for entry in dataset2:
 
@@ -97,9 +101,9 @@ def index(request):
         name = uid.user_id
 
         if name == usd:
-
             categories.append('%s' % name)
             expense_series.append((int)(entry.amount))
+            # print(expense_series)
 
     for entry in dataset3:
 
@@ -108,7 +112,6 @@ def index(request):
         name = uid.user_id
 
         if name == usd:
-
             categories.append('%s' % name)
             income_series.append((int)(entry.amount))
 
@@ -118,11 +121,14 @@ def index(request):
         'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
     for i in income:
         arr.append(i.amount)
+        print(arr)
 
     expenses = Transaction.objects.raw(
         'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
     for i in expenses:
         arr.append(i.amount)
+        print(arr)
+
     if arr[0] != None and arr[1] != None:
         savings = arr[0]-arr[1]
     else:
@@ -283,8 +289,9 @@ def transaction(request):
         cat = catid
         catobj = Category.objects.get(pk=catid)
         cat_name = str(catobj)
+        # print(cat_name)
         cat_name = cat_name[4:]
-        print('cat_name', cat_name[4:])
+        # print('cat_name', cat_name[4:])
         amount = request.POST.get('amount')
         # print(amount)
         date = request.POST.get('date')
@@ -299,9 +306,9 @@ def transaction(request):
         sid.lexicon.update(new_words)
         # calculates the positive, negative, neutral, and compound sentiment score for the review
         score = sid.polarity_scores(feedback)
-        #print("Score", score)
+        print("Score", score)
         compound = score.get('compound')
-        #print("compound", compound)
+        print("compound", compound)
 
         usd = request.user.id
 
@@ -319,9 +326,9 @@ def transaction(request):
         for entry in dataset1:
             usid = Transaction.objects.get(pk=entry.id)
             fdb = usid.feedback
-            # print(fdb)
+            print(fdb)
             review.append('%s' % fdb)
-        # print(review)
+        print(review)
         total = 0
         for i in review:
             # print(i)
@@ -337,23 +344,33 @@ def transaction(request):
             #print("compound", compound)
 
             total += compound
-            # print(total)
+            print(total)
+
+        avgtotal = total/(len(review))
+        print(avgtotal)
+
         alltransaction = Transaction.objects.filter(user=request.user)
         if total < -0.2:
-
-            return render(request, 'addtransaction.html', {'alert_flag': True, 'cat_name': cat_name})
+            notification = Notification(user=request.user, category=catobj)
+            notification.save()
+            return render(request, 'transaction.html', {'alert_flag': True, 'cat_name': cat_name,
+                                                        'alltransaction': alltransaction})
 
         arr = []
 
         income = Transaction.objects.raw(
             'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
         for i in income:
+            print(i.amount)
             arr.append(i.amount)
 
         expenses = Transaction.objects.raw(
             'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
         for i in expenses:
+            print(i.amount)
             arr.append(i.amount)
+
+        print(arr)
         if arr[0] != None and arr[1] != None:
             savings = arr[0]-arr[1]
         else:
@@ -368,7 +385,7 @@ def transaction(request):
 
         return redirect('/transaction')
     else:
-        print(request.GET)
+        # print(request.GET)
         # print(request.GET.get('startdate'))
         # print(request.GET.get('enddate'))
         # print(type(request.GET.get('startdate')))

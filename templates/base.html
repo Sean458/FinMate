@@ -97,14 +97,29 @@
                                 id="bell" role="button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 <span><i data-feather="bell" class="svg-icon"></i></span>
-                                <span class="badge badge-primary notify-no rounded-circle">5</span>
+                                <!-- <span class="badge badge-primary notify-no rounded-circle">1</span> -->
                             </a>
                             <div class="dropdown-menu dropdown-menu-left mailbox animated bounceInDown">
                                 <ul class="list-style-none">
                                     <li>
                                         <div class="message-center notifications position-relative">
                                             <!-- Message -->
+                                            {% for n in top_notifications%}
                                             <a href="javascript:void(0)"
+                                                class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                                <div class="btn btn-danger rounded-circle btn-circle"><i
+                                                        data-feather="airplay" class="text-white"></i></div>
+                                                <div class="w-75 d-inline-block v-middle pl-2">
+                                                    <h6 class="message-title mb-0 mt-1">{{n.category.category_name}}
+                                                    </h6>
+                                                    <span class="font-12 text-nowrap d-block text-muted">Spend Less on
+                                                        this Category</span>
+                                                    <span
+                                                        class="font-12 text-nowrap d-block text-muted">{{n.created_date}}</span>
+                                                </div>
+                                            </a>
+                                            {% endfor %}
+                                            <!-- <a href="javascript:void(0)"
                                                 class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                 <div class="btn btn-danger rounded-circle btn-circle"><i
                                                         data-feather="airplay" class="text-white"></i></div>
@@ -115,9 +130,9 @@
                                                         admin!</span>
                                                     <span class="font-12 text-nowrap d-block text-muted">9:30 AM</span>
                                                 </div>
-                                            </a>
+                                            </a> -->
                                             <!-- Message -->
-                                            <a href="javascript:void(0)"
+                                            <!-- <a href="javascript:void(0)"
                                                 class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                 <span class="btn btn-success text-white rounded-circle btn-circle"><i
                                                         data-feather="calendar" class="text-white"></i></span>
@@ -128,9 +143,9 @@
                                                         a reminder that you have event</span>
                                                     <span class="font-12 text-nowrap d-block text-muted">9:10 AM</span>
                                                 </div>
-                                            </a>
+                                            </a> -->
                                             <!-- Message -->
-                                            <a href="{% static 'javascript:void(0)' %}"
+                                            <!-- <a href="{% static 'javascript:void(0)' %}"
                                                 class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                 <span class="btn btn-info rounded-circle btn-circle"><i
                                                         data-feather="settings" class="text-white"></i></span>
@@ -142,9 +157,9 @@
                                                         as you want</span>
                                                     <span class="font-12 text-nowrap d-block text-muted">9:08 AM</span>
                                                 </div>
-                                            </a>
+                                            </a> -->
                                             <!-- Message -->
-                                            <a href="{% static 'javascript:void(0)' %}"
+                                            <!-- <a href="{% static 'javascript:void(0)' %}"
                                                 class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                 <span class="btn btn-primary rounded-circle btn-circle"><i
                                                         data-feather="box" class="text-white"></i></span>
@@ -154,12 +169,11 @@
                                                         see the my admin!</span>
                                                     <span class="font-12 text-nowrap d-block text-muted">9:02 AM</span>
                                                 </div>
-                                            </a>
+                                            </a> -->
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link pt-3 text-center text-dark"
-                                            href="{% static 'javascript:void(0)' %}">
+                                        <a class="nav-link pt-3 text-center text-dark" href="javascript:void(0)">
                                             <strong>Check all notifications</strong>
                                             <i class="fa fa-angle-right"></i>
                                         </a>

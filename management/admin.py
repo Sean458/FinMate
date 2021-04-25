@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, CustomUser, Transaction
+from .models import Category, CustomUser, Transaction, Notification
 
 # Register your models here.
 
@@ -16,4 +16,9 @@ class TransactionAdmin(admin.ModelAdmin):
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ['user', 'country','credit_score']
+    list_display = ['user', 'country', 'credit_score']
+
+
+@admin.register(Notification)
+class NotificatioinAdmin(admin.ModelAdmin):
+    list_display = ['user', 'category', 'created_date']

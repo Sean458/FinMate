@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AnonymousUser, User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -21,7 +22,15 @@ class Transaction(models.Model):
     feedback = models.TextField()
     sentiment = models.FloatField(default=0.0)
 
+
 class CustomUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True,)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, primary_key=True,)
     country = models.CharField(max_length=30)
     credit_score = models.FloatField(default=0.0)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(default=timezone.now)
