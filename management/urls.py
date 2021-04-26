@@ -16,4 +16,5 @@ urlpatterns = [
     path('addexpense', views.addexpense, name='addexpense'),
     path('transaction', views.transaction, name='transaction'),
     path('export', views.export, name='export'),
+    path('report', views.report, name='report'),
 ]
