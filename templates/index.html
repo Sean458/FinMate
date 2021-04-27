@@ -121,8 +121,34 @@
                     <div class="card-body">
 
 
-                        <h4 class="card-title">Total Transactions</h4>
+                        <h4 class="card-title">Earning Stats</h4>
                         <div id="container1"></div>
+                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                        <script>
+                            Highcharts.chart('container1', {
+                                chart: {
+                                    type: 'areaspline'
+                                },
+                                title: {
+                                    text: 'User Income'
+                                },
+                                xAxis: {
+                                    categories: {{ date_series_inc | safe }}
+                                },
+                                plotOptions: {
+                                areaspline: {
+                                    fillOpacity: 0.5
+                                }
+                            },
+
+                                series: [{
+                                    name: "Income earned",
+                                    data: {{ income_series }},
+                                    
+                                }] 
+                              });
+                        </script>
+                        <!--
                         <script src="https://code.highcharts.com/highcharts.src.js"></script>
                         <script>
                             Highcharts.chart('container1', {
@@ -133,7 +159,7 @@
                                     text: 'Transactions'
                                 },
                                 xAxis: {
-                                    categories: {{ categories| safe }}
+                                    categories: {{ categories | safe }}
                                     },
                                 plotOptions: {
                                 pie: {
@@ -147,13 +173,13 @@
                             },
 
                                 series: [{
-                                    name: 'Transactions',
-                                    data: {{ amount_series }},
+                                    name: 'Transaction',
+                                    data: { {[amount_series]} },
                                 colorByPoint: true,
                                     }] 
                                   });
                         </script>
-
+                    -->
 
 
 
@@ -176,7 +202,7 @@
                                     text: 'User Expense'
                                 },
                                 xAxis: {
-                                    categories: {{ categories| safe }}
+                                    categories: {{ date_series | safe }}
                                     },
 
                                 series: [{
@@ -262,7 +288,7 @@
         <!-- *************************************************************** -->
         <!-- *************************************************************** -->
         <!-- Start Location and Earnings Charts Section -->
-        <!-- *************************************************************** -->
+        <!-- *************************************************************** 
         <div class="row">
             <div class="col-md-6 col-lg-8">
                 <div class="card">
@@ -286,6 +312,7 @@
                         <div class="pl-4 mb-5">
 
                             <div id="container3"></div>
+                            <!--
                             <script src="https://code.highcharts.com/highcharts.src.js"></script>
                             <script>
                                 Highcharts.chart('container3', {
@@ -311,6 +338,7 @@
                                     }] 
                                   });
                             </script>
+                            
                         </div>
                         <ul class="list-inline text-center mt-4 mb-0">
                             <li class="list-inline-item text-muted font-italic">Earnings for this month</li>
@@ -337,7 +365,7 @@
                 </div>
             </div>
         </div>
-        <!-- *************************************************************** -->
+         *************************************************************** -->
         <!-- End Location and Earnings Charts Section -->
         <!-- *************************************************************** -->
         <!-- *************************************************************** -->

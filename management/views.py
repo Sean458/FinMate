@@ -31,20 +31,22 @@ def home(request):
 
 
 def index(request):
+    usd = request.user.id
+
     dataset = Transaction.objects.raw(
-        'SELECT distinct(id), sum(amount) as total_amount,date FROM management_transaction GROUP BY id ORDER BY id')
+        'SELECT distinct(management_transaction.id), sum(management_transaction.amount) as total_amount,date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id  GROUP BY management_transaction.id ORDER BY management_transaction.id')
     # print(dataset)
     dataset2 = Transaction.objects.raw(
-        'SELECT management_transaction.id,management_transaction.user_id, management_transaction.amount ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1')
+        'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_expense,management_transaction.date ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1  group by management_transaction.date order by management_transaction.date')
     dataset3 = Transaction.objects.raw(
-        'SELECT management_transaction.id,management_transaction.user_id, management_transaction.amount ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0')
+        'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_income ,management_transaction.date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 group by management_transaction.date order by management_transaction.date')
     ctry = CustomUser.objects.raw(
         'SELECT user_id,country from management_customuser')
     #  .values('VehicleID') \
     #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
     #  .group_by('VehicleID') \
     #  .order_by('VehicleID')
-    usd = request.user.id
+    #usd = request.user.id
     c = CustomUser.objects.raw(
         'SELECT user_id from management_customuser where user_id=%s', [usd])
     # print(c)
@@ -64,6 +66,7 @@ def index(request):
 
     categories = list()
     date_series = list()
+    date_series_inc = list()
     amount_series = list()
     expense_series = list()
     income_series = list()
@@ -99,29 +102,35 @@ def index(request):
         uid = Transaction.objects.get(pk=entry.id)
         name = uid.user_id
         if name == usd:
-            amount_series.append((int)(entry.total_amount))
-            # print(amount_series)
-
+            amount_series.append(
+                [entry.category_name, (int)(entry.total_amount)])
+            print(amount_series)
+    print(json.dumps(amount_series))
+    cut = 0
     for entry in dataset2:
 
         uid = Transaction.objects.get(pk=entry.id)
         amount = uid.amount
         name = uid.user_id
-
-        if name == usd:
-            categories.append('%s' % name)
-            expense_series.append((int)(entry.amount))
+        #cat_id = uid.category
+        #cat_or_id = Category.objects.get(pk = cat_id)
+        #cat_name = cat_or_id.category_name
+        if name == usd and cut != 5:
+            date_series.append((str)(entry.date))
+            expense_series.append((int)(entry.total_expense))
+            cut += 1
             # print(expense_series)
-
+    cuti = 0
     for entry in dataset3:
 
         uid = Transaction.objects.get(pk=entry.id)
         amount = uid.amount
         name = uid.user_id
 
-        if name == usd:
-            categories.append('%s' % name)
-            income_series.append((int)(entry.amount))
+        if name == usd and cuti != 5:
+            date_series_inc.append((str)(entry.date))
+            income_series.append((int)(entry.total_income))
+            cuti += 1
 
     arr = []
 
@@ -143,7 +152,8 @@ def index(request):
         savings = None
 
     return render(request, 'index.html', {'income': income, 'expenses': expenses, 'savings': savings, 'categories': json.dumps(categories),
-                                          # 'date_series': json.dumps(date_series),
+                                          'date_series': json.dumps(date_series),
+                                          'date_series_inc': json.dumps(date_series_inc),
                                           'amount_series': json.dumps(amount_series),
                                           'expense_series': json.dumps(expense_series),
                                           'income_series': json.dumps(income_series),
@@ -472,7 +482,8 @@ def report(request):
         print(transobj)
 
         template_path = 'report.html'
-        context = {'income': income, 'expense': expense, 'saving': saving,'date':monthyear}
+        context = {'income': income, 'expense': expense,
+                   'saving': saving, 'date': monthyear}
         # Create a Django response object, and specify content_type as pdf
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'filename="report.pdf"'
