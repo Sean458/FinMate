@@ -11,7 +11,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'category', 'amount', 'date', 'feedback']
+    list_display = ['id', 'user', 'category',
+                    'amount', 'date', 'feedback', 'description']
 
 
 @admin.register(CustomUser)

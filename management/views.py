@@ -31,137 +31,140 @@ def home(request):
 
 
 def index(request):
-    usd = request.user.id
+    if request.user.is_authenticated:
+        usd = request.user.id
 
-    dataset = Transaction.objects.raw(
-        'SELECT distinct(management_transaction.id), sum(management_transaction.amount) as total_amount,date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id  GROUP BY management_transaction.id ORDER BY management_transaction.id')
-    # print(dataset)
-    dataset2 = Transaction.objects.raw(
-        'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_expense,management_transaction.date ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1  group by management_transaction.date order by management_transaction.date')
-    dataset3 = Transaction.objects.raw(
-        'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_income ,management_transaction.date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 group by management_transaction.date order by management_transaction.date')
-    ctry = CustomUser.objects.raw(
-        'SELECT user_id,country from management_customuser')
-    #  .values('VehicleID') \
-    #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
-    #  .group_by('VehicleID') \
-    #  .order_by('VehicleID')
-    #usd = request.user.id
-    c = CustomUser.objects.raw(
-        'SELECT user_id from management_customuser where user_id=%s', [usd])
-    # print(c)
-    percentile = 0.0
-    for entry in c:
-        print(entry.user_id)
-        queryset = CustomUser.objects.all()
-        total_count = queryset.count()
-        if total_count:
-            percentile = float(queryset.filter(
-                credit_score__lt=entry.credit_score).count())/total_count
-            print(percentile)
+        dataset = Transaction.objects.raw(
+            'SELECT distinct(management_transaction.id), sum(management_transaction.amount) as total_amount,date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id  GROUP BY management_transaction.id ORDER BY management_transaction.id')
+        # print(dataset)
+        dataset2 = Transaction.objects.raw(
+            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_expense,management_transaction.date ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1  group by management_transaction.date order by management_transaction.date')
+        dataset3 = Transaction.objects.raw(
+            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_income ,management_transaction.date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 group by management_transaction.date order by management_transaction.date')
+        ctry = CustomUser.objects.raw(
+            'SELECT user_id,country from management_customuser')
+        #  .values('VehicleID') \
+        #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
+        #  .group_by('VehicleID') \
+        #  .order_by('VehicleID')
+        #usd = request.user.id
+        c = CustomUser.objects.raw(
+            'SELECT user_id from management_customuser where user_id=%s', [usd])
+        # print(c)
+        percentile = 0.0
+        for entry in c:
+            print(entry.user_id)
+            queryset = CustomUser.objects.all()
+            total_count = queryset.count()
+            if total_count:
+                percentile = float(queryset.filter(
+                    credit_score__lt=entry.credit_score).count())/total_count
+                print(percentile)
+            else:
+                percentile = 0.0
+            # print('percentile',percentile)
+        percentile = percentile*100
+
+        categories = list()
+        date_series = list()
+        date_series_inc = list()
+        amount_series = list()
+        expense_series = list()
+        income_series = list()
+
+        ind = 0
+        usa = 0
+        uk = 0
+        china = 0
+        cnt = 0
+        for i in ctry:
+            # print('country',i.country)
+            if i.country == 'India':
+                ind += 1
+                cnt += 1
+            if i.country == 'USA':
+                usa += 1
+                cnt += 1
+            if i.country == 'UK':
+                uk += 1
+                cnt += 1
+            if i.country == 'China':
+                china += 1
+                cnt += 1
+
+        ind = int((ind/cnt)*100)
+        usa = int((usa/cnt)*100)
+        uk = int((uk/cnt)*100)
+        china = int((china/cnt)*100)
+        print(ind, usa, uk, china)
+
+        for entry in dataset:
+            # print(entry.id, entry.total_amount, entry.date)
+            uid = Transaction.objects.get(pk=entry.id)
+            name = uid.user_id
+            if name == usd:
+                amount_series.append(
+                    [entry.category_name, (int)(entry.total_amount)])
+                print(amount_series)
+        print(json.dumps(amount_series))
+        cut = 0
+        for entry in dataset2:
+
+            uid = Transaction.objects.get(pk=entry.id)
+            amount = uid.amount
+            name = uid.user_id
+            #cat_id = uid.category
+            #cat_or_id = Category.objects.get(pk = cat_id)
+            #cat_name = cat_or_id.category_name
+            if name == usd and cut != 5:
+                date_series.append((str)(entry.date))
+                expense_series.append((int)(entry.total_expense))
+                cut += 1
+                # print(expense_series)
+        cuti = 0
+        for entry in dataset3:
+
+            uid = Transaction.objects.get(pk=entry.id)
+            amount = uid.amount
+            name = uid.user_id
+
+            if name == usd and cuti != 5:
+                date_series_inc.append((str)(entry.date))
+                income_series.append((int)(entry.total_income))
+                cuti += 1
+
+        arr = []
+
+        income = Transaction.objects.raw(
+            'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
+        for i in income:
+            arr.append(i.amount)
+            print(arr)
+
+        expenses = Transaction.objects.raw(
+            'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
+        for i in expenses:
+            arr.append(i.amount)
+            print(arr)
+
+        if arr[0] != None and arr[1] != None:
+            savings = arr[0]-arr[1]
         else:
-            percentile = 0.0
-        # print('percentile',percentile)
-    percentile = percentile*100
+            savings = None
 
-    categories = list()
-    date_series = list()
-    date_series_inc = list()
-    amount_series = list()
-    expense_series = list()
-    income_series = list()
-
-    ind = 0
-    usa = 0
-    uk = 0
-    china = 0
-    cnt = 0
-    for i in ctry:
-        # print('country',i.country)
-        if i.country == 'India':
-            ind += 1
-            cnt += 1
-        if i.country == 'USA':
-            usa += 1
-            cnt += 1
-        if i.country == 'UK':
-            uk += 1
-            cnt += 1
-        if i.country == 'China':
-            china += 1
-            cnt += 1
-
-    ind = int((ind/cnt)*100)
-    usa = int((usa/cnt)*100)
-    uk = int((uk/cnt)*100)
-    china = int((china/cnt)*100)
-    print(ind, usa, uk, china)
-
-    for entry in dataset:
-        # print(entry.id, entry.total_amount, entry.date)
-        uid = Transaction.objects.get(pk=entry.id)
-        name = uid.user_id
-        if name == usd:
-            amount_series.append(
-                [entry.category_name, (int)(entry.total_amount)])
-            print(amount_series)
-    print(json.dumps(amount_series))
-    cut = 0
-    for entry in dataset2:
-
-        uid = Transaction.objects.get(pk=entry.id)
-        amount = uid.amount
-        name = uid.user_id
-        #cat_id = uid.category
-        #cat_or_id = Category.objects.get(pk = cat_id)
-        #cat_name = cat_or_id.category_name
-        if name == usd and cut != 5:
-            date_series.append((str)(entry.date))
-            expense_series.append((int)(entry.total_expense))
-            cut += 1
-            # print(expense_series)
-    cuti = 0
-    for entry in dataset3:
-
-        uid = Transaction.objects.get(pk=entry.id)
-        amount = uid.amount
-        name = uid.user_id
-
-        if name == usd and cuti != 5:
-            date_series_inc.append((str)(entry.date))
-            income_series.append((int)(entry.total_income))
-            cuti += 1
-
-    arr = []
-
-    income = Transaction.objects.raw(
-        'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
-    for i in income:
-        arr.append(i.amount)
-        print(arr)
-
-    expenses = Transaction.objects.raw(
-        'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
-    for i in expenses:
-        arr.append(i.amount)
-        print(arr)
-
-    if arr[0] != None and arr[1] != None:
-        savings = arr[0]-arr[1]
+        return render(request, 'index.html', {'income': income, 'expenses': expenses, 'savings': savings, 'categories': json.dumps(categories),
+                                              'date_series': json.dumps(date_series),
+                                              'date_series_inc': json.dumps(date_series_inc),
+                                              'amount_series': json.dumps(amount_series),
+                                              'expense_series': json.dumps(expense_series),
+                                              'income_series': json.dumps(income_series),
+                                              'ind': ind,
+                                              'usa': usa,
+                                              'uk': uk,
+                                              'china': china,
+                                              'percentile': percentile, })
     else:
-        savings = None
-
-    return render(request, 'index.html', {'income': income, 'expenses': expenses, 'savings': savings, 'categories': json.dumps(categories),
-                                          'date_series': json.dumps(date_series),
-                                          'date_series_inc': json.dumps(date_series_inc),
-                                          'amount_series': json.dumps(amount_series),
-                                          'expense_series': json.dumps(expense_series),
-                                          'income_series': json.dumps(income_series),
-                                          'ind': ind,
-                                          'usa': usa,
-                                          'uk': uk,
-                                          'china': china,
-                                          'percentile': percentile, })
+        return redirect('/users/login')
 
 
 def register(request):
@@ -314,8 +317,11 @@ def transaction(request):
         # print(amount)
         date = request.POST.get('date')
         # print(date)
+        description = request.POST.get('description')
         feedback = request.POST.get('feedback')
         # print(feedback)
+        if catobj.is_expense == 0:
+            feedback = ""
 
         new_words = {'cushiony': 1, 'comfort': 0, 'support': 0, 'unsupportive': -1, 'lightweight': 1, 'heavyweight': -1, 'stabilize': 1, 'instability': -1, 'unresponsive': -1, 'durable': 1, 'breathable': 1, 'protective': 1, 'too': 0, 'flimsy': -1, 'freedom': 0, 'tore': -1.5, 'narrow': -1, 'strike': 0, 'right': 1.5, 'hole': -1.5, 'never': -.5,
                      'holes': -1.5, "stiff": -1, 'return': -.5, 'returning': -.5, 'issue': -1, "untied": -1, 'clunky': -1, 'stiffness': -1, 'swollen': -1, 'stylish': 1, 'rip': -1, 'returned': -.5, 'bulky': -1}  # this list specifies sentiment scores for common words that are related to running shoes, in other words it adds context to the sentiment analysis
@@ -331,7 +337,7 @@ def transaction(request):
         usd = request.user.id
 
         newtransaction = Transaction(
-            user=request.user, category=catobj, amount=amount, date=date, feedback=feedback, sentiment=compound)
+            user=request.user, category=catobj, amount=amount, date=date, description=description, feedback=feedback, sentiment=compound)
 
         newtransaction.save()
 
@@ -417,7 +423,8 @@ def transaction(request):
         # print(startdate)
         # print(enddate)
         alltransaction = Transaction.objects.filter(
-            user=request.user)
+            user=request.user).order_by('-id')
+        # print(alltransaction)
         return render(request, "transaction.html", {'alltransaction': alltransaction})
 
 
@@ -433,14 +440,14 @@ def export(request):
             str(datetime.datetime.now())+'.csv'
 
         writer = csv.writer(response)
-        writer.writerow(['Category', 'Amount', 'Date', 'Feedback'])
+        writer.writerow(['Category', 'Amount', 'Date', 'Description'])
 
         transactions = Transaction.objects.filter(
             user=request.user, date__range=[startdate, enddate])
 
         for transaction in transactions:
             writer.writerow([transaction.category.category_name, transaction.amount,
-                             transaction.date, transaction.feedback])
+                             transaction.date, transaction.description])
 
         return response
     else:

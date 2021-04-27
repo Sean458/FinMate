@@ -23,13 +23,13 @@
                 CSV</a>
         </h1> -->
 
-            <table id="default_order" class="table table-striped table-bordered display no-wrap">
+            <table id="myTable" class="table table-striped table-bordered display no-wrap">
                 <thead>
                     <tr>
                         <th scope="col">Category</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
-                        <th scope="col">FeedBack</th>
+                        <th scope="col">Description</th>
                     </tr>
                 </thead>
                 <tbody id="tbody" id="tbody">
@@ -46,7 +46,7 @@
                             {{t.date}}
                         </td>
                         <td>
-                            {{t.feedback}}
+                            {{t.description}}
                         </td>
                     </tr>
                     {% endfor %}
@@ -67,7 +67,10 @@
 
 <script>
     $(document).ready(function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            "order": []
+        });
+
     });
 </script>
 
