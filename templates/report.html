@@ -19,21 +19,57 @@
                 height: 692pt;
                 -pdf-frame-border: 1;
                 /* for debugging the layout */
+                padding: 5px 15px;
             }
+        }
+
+        th,
+        td {
+            padding: 5px 15px;
+        }
+
+        th {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        td {
+            font-size: 15px;
         }
     </style>
 </head>
 
 <body>
 
-    <h1 class="text-center">Monthly Report for {{date}}</h1>
+    <h1 style="text-align: center;">Monthly Report for {{date}}</h1>
 
-    <h1> Income: {{income}}</h1>
 
-    <h1> Expense: {{expense}}</h1>
 
-    <h1> Saving: {{saving}}</h1>
+    <h1 style="text-align: center;"> Income: {{income}}</h1>
 
+    <h1 style="text-align: center;"> Expense: {{expense}}</h1>
+
+    <h1 style="text-align: center;"> Saving: {{saving}}</h1>
+
+    <table border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr>
+                <td>Category</td>
+                <td>Amount</td>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for i in transobj %}
+            <tr>
+                <td>{{i.category}}</td>
+                <td>{{i.amount}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 
 </body>

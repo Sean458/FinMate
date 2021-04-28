@@ -53,13 +53,13 @@ def index(request):
         # print(c)
         percentile = 0.0
         for entry in c:
-            print(entry.user_id)
+            # print(entry.user_id)
             queryset = CustomUser.objects.all()
             total_count = queryset.count()
             if total_count:
                 percentile = float(queryset.filter(
                     credit_score__lt=entry.credit_score).count())/total_count
-                print(percentile)
+                # print(percentile)
             else:
                 percentile = 0.0
             # print('percentile',percentile)
@@ -96,7 +96,7 @@ def index(request):
         usa = int((usa/cnt)*100)
         uk = int((uk/cnt)*100)
         china = int((china/cnt)*100)
-        print(ind, usa, uk, china)
+        # print(ind, usa, uk, china)
 
         for entry in dataset:
             # print(entry.id, entry.total_amount, entry.date)
@@ -105,8 +105,8 @@ def index(request):
             if name == usd:
                 amount_series.append(
                     [entry.category_name, (int)(entry.total_amount)])
-                print(amount_series)
-        print(json.dumps(amount_series))
+                # print(amount_series)
+        # print(json.dumps(amount_series))
         cut = 0
         for entry in dataset2:
 
@@ -139,18 +139,25 @@ def index(request):
             'SELECT management_transaction.id,sum(management_transaction.amount) as amount  FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s', [usd])
         for i in income:
             arr.append(i.amount)
-            print(arr)
+            # print(arr)
 
         expenses = Transaction.objects.raw(
             'SELECT management_transaction.id,sum(management_transaction.amount) as amount FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s', [usd])
         for i in expenses:
             arr.append(i.amount)
-            print(arr)
+            # print(arr)
 
         if arr[0] != None and arr[1] != None:
             savings = arr[0]-arr[1]
         else:
             savings = None
+
+        print(categories)
+        print(date_series)
+        print(date_series_inc)
+        print(amount_series)
+        print(expense_series)
+        print(income_series)
 
         return render(request, 'index.html', {'income': income, 'expenses': expenses, 'savings': savings, 'categories': json.dumps(categories),
                                               'date_series': json.dumps(date_series),
@@ -490,7 +497,7 @@ def report(request):
 
         template_path = 'report.html'
         context = {'income': income, 'expense': expense,
-                   'saving': saving, 'date': monthyear}
+                   'saving': saving, 'date': monthyear, 'transobj': transobj}
         # Create a Django response object, and specify content_type as pdf
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'filename="report.pdf"'
