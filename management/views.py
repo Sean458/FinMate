@@ -30,6 +30,33 @@ def home(request):
     return render(request, 'home.html')
 
 
+def invest(request):
+    if request.method == 'POST':
+        investment = request.POST['investment']
+        interest = request.POST['interest']
+        timeperiod = request.POST['timeperiod']
+
+        principle=list()
+        earned=list()
+
+        intr=int(investment)*(float(interest)/100)*int(timeperiod)
+
+        print("Interest",intr)
+        principle.append((int)(investment))
+        principle.append((int)(intr))
+        earned.append((int)(intr))
+        print(principle)
+        print(earned)
+
+    
+
+
+        
+        return render(request, 'invest.html', {'principle': json.dumps(principle),'intr': json.dumps(intr),})
+    else:
+        return render(request, 'invest.html')
+
+
 def index(request):
     if request.user.is_authenticated:
         usd = request.user.id

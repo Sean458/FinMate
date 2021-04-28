@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}Invest{% endblock title %}
+
+{% block body %}
+
+<div class="page-wrapper">
+
+    <div class="page-breadcrumb">
+
+        <div class="container mt-5">
+            
+                <div class="row">
+
+                <div class="col-lg-4 col-md-12">
+                <div class="card">
+                <div class="card-body">
+
+                <h4 class="card-title">FD Calculator</h4>
+                <br>
+                <h5>Total Investment</h5>
+                <form action="invest" method="post">
+                    {% csrf_token %}
+                <div class="form-group">
+                    <input class="form-control" type="range" name="investment" min="1000" max="1000000" value="100000" step="100000" class="slider" id="investment">
+                    <p>Amount: <span id="amt"></span></p>
+                  </div>
+
+                <h5>Rate of Interest (P.A)</h5>
+                <div class="form-group">
+                    <input class="form-control" type="range" name="interest" min="1" max="15" value="6.5" step="0.5" class="slider" id="interest">
+                    <p>Rate of Interest: <span id="roi"></span></p>
+                  </div>
+
+                <h5>Time Period</h5>
+                <div class="form-group">
+                    <input class="form-control" type="range" name="timeperiod" min="1" max="10" value="5" step="1" class="slider" id="timeperiod">
+                    <p>Time Period: <span id="time"></span></p>
+                  </div>
+
+                  <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block">Calculate</button>
+                </div>
+
+                </form>
+                <div id="container10"></div>
+                    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                    <script>
+                        Highcharts.chart('container10', {
+                            chart: {
+                                type: 'pie'
+                            },
+                            title: {
+                                text: 'Transactions'
+                            },
+                            
+                        },
+                            plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: false,
+                                    
+                                }
+                            }
+                        },
+
+                        series: [{
+                                name: 'Principle',
+                                data: {{ principle }},
+                            colorByPoint: true,
+                        }] 
+                      });
+                    </script>
+
+                
+                    
+
+                 
+                  
+                  <script>
+                  var slider1 = document.getElementById("investment");
+                  var output1 = document.getElementById("amt");
+                  output1.innerHTML = slider1.value;
+
+                  var slider2 = document.getElementById("interest");
+                  var output2 = document.getElementById("roi");
+                  output2.innerHTML = slider2.value;
+
+                  var slider3 = document.getElementById("timeperiod");
+                  var output3 = document.getElementById("time");
+                  output3.innerHTML = slider3.value;
+                  
+                  slider1.oninput = function() {
+                    output1.innerHTML = this.value;
+                  }
+                  slider2.oninput = function() {
+                    output2.innerHTML = this.value;  
+                  }
+                  slider3.oninput = function() {
+                    output3.innerHTML = this.value;
+                    
+                    
+                  }
+                  
+
+                  
+                  
+                  
+                  </script>
+
+            </div>
+            </div>
+            </div>
+            </div>
+       
+                
+
+
+
+
+
+            
+        </div>
+    </div>
+
+    
+</div>
+
+
+{% endblock body %}
