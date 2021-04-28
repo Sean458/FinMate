@@ -62,23 +62,33 @@
                 type: 'pie'
               },
               title: {
-                text: 'Transactions'
+                text: 'Investment'
               },
               plotOptions: {
                 pie: {
                   allowPointSelect: true,
                   cursor: 'pointer',
                   dataLabels: {
-                    enabled: false,
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                   }
                 }
               },
 
               series: [{
-                name: 'Principle',
-                data: {{ principle }},
-              colorByPoint: true,
-                }] 
+                name: 'Investment',
+                innerSize: '40%',
+
+                data: [
+                  {% for key, value in dict.items %}
+                  {
+                name: '{{key}}',
+                y: {{ value }},
+                  },
+                
+              {% endfor %}  
+              ]
+            }] 
               });
           </script>
 

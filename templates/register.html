@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -49,9 +49,9 @@
     </div>
 </body>
 
-</html>
+</html> -->
 
-{% comment %} {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html dir="ltr">
 
@@ -64,7 +64,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{% static '/assets/images/favicon.png' %}">
-    <title>Adminmart Template - The Ultimate Multipurpose admin template</title>
+    <title>Register</title>
     <!-- Custom CSS -->
     <link href="{% static '/dist/css/style.min.css' %}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -96,34 +96,62 @@
             style="background:url('{% static '/assets/images/big/auth-bg.jpg' %}') no-repeat center center;">
             <div class="auth-box row text-center">
                 <div class="col-lg-7 col-md-5 modal-bg-img"
-                    style="background-image: url('{% static '/assets/images/big/3.jpg' %}');">
+                    style="background-image: url('{% static '/assets/images/img5.jpg' %}');">
                 </div>
                 <div class="col-lg-5 col-md-7 bg-white">
                     <div class="p-3">
                         <img src="{% static '/assets/images/big/icon.png' %}" alt="wrapkit">
                         <h2 class="mt-3 text-center">Sign Up for Free</h2>
-                        <form class="mt-4">
+                        <form class="mt-4" action="register" method="post">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input class="form-control" type="text" placeholder="your name">
+                                        <input class="form-control" type="text" name="firstName"
+                                            placeholder="First Name" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input class="form-control" type="email" placeholder="email address">
+                                        <input class="form-control" type="text" name="lastName" placeholder="Last Name"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input class="form-control" type="password" placeholder="password">
+                                        <input class="form-control" type="email" name="email" placeholder="Email"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="country" placeholder="Country"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="userName" placeholder="Username"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password"
+                                            placeholder="Password" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="confirmPassword"
+                                            placeholder="Confirm Password" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 text-center">
                                     <button type="submit" class="btn btn-block btn-dark">Sign Up</button>
                                 </div>
                                 <div class="col-lg-12 text-center mt-5">
-                                    Already have an account? <a href="#" class="text-danger">Sign In</a>
+                                    Already have an account? <a href="/users/login" class="text-danger">Sign In</a>
                                 </div>
                             </div>
                         </form>
@@ -150,4 +178,4 @@
     </script>
 </body>
 
-</html> {% endcomment %}
+</html>

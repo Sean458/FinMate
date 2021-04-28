@@ -4,21 +4,110 @@
 
 {% block body %}
 
+
 <div class="page-wrapper">
 
     <div class="page-breadcrumb">
 
 
+        <div class="row">
+            
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
 
-        <div class="container mt-5 ">
 
-            {% for i in transactions %}
-            <h1>{{i.id}}</h1>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+                        <h4 class="card-title">Earning Stats</h4>
+                        <div id="container1"></div>
+                        
+                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                        <script>
+                            Highcharts.chart('container1', {
+                                chart: {
+                                    type: 'pie'
+                                },
+                                title: {
+                                    text: 'Transactions'
+                                },
+                                // xAxis: {
+                                //    categories: {{ categories | safe }}
+                                 //   },
+                                plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: false,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
 
+                                series: [{
+                                    name: 'Transaction',
+                                    data: [{name : { {category_series_inc} },
+                                            y : { {income_series} } }],
+                                colorByPoint: true,
+                                    }] 
+                                  });
+                        </script>
+                    
+
+
+
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+
+
+                        <h4 class="card-title">Earning Stats</h4>
+                        <div id="container2"></div>
+                        
+                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                        <script>
+                            Highcharts.chart('container2', {
+                                chart: {
+                                    type: 'pie'
+                                },
+                                title: {
+                                    text: 'Transactions'
+                                },
+                                xAxis: {
+                                    categories: {{ categories | safe }}
+                                    },
+                                plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: false,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
+
+                                series: [{
+                                    name: 'Transaction',
+                                    data: [ { name : { {category_series_exp} },
+                                            y : { {expense_series} } } ],
+                                colorByPoint: true,
+                                    }] 
+                                  });
+                        </script>
+                    
+
+
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>  
+    </div> 
+</div>       
+  
 
 
 {% endblock body %}

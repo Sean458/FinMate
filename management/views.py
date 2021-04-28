@@ -45,10 +45,24 @@ def invest(request):
         principle.append((int)(investment))
         principle.append((int)(intr))
         earned.append((int)(intr))
-        print(principle)
-        print(earned)
+        # print(principle)
+        # print(earned)
 
-        return render(request, 'invest.html', {'principle': json.dumps(principle), 'intr': json.dumps(intr), })
+        # print(json.dumps(principle))
+        # for i in (principle):
+        #     print(i)
+
+        interest = (int)(intr)
+
+        dict = {
+            "Principle": investment,
+            "Interest": interest
+        }
+
+        for key in dict:
+            print(key, dict[key])
+
+        return render(request, 'invest.html', {'principle': (principle), 'dict': dict})
     else:
         return render(request, 'invest.html')
 
@@ -261,7 +275,8 @@ def category_income(request):
 
 
 def category_expense(request):
-    category_list = Category.objects.filter(user=request.user, is_expense=True)
+    category_list = Category.objects.filter(
+        user=request.user, is_expense=True)
     # print(category_list)
     return render(request, "category_expense.html", {'category_list': category_list})
 
@@ -543,12 +558,53 @@ def summaryreport(request):
     if request.method == "POST":
         startdate = request.POST.get('startdate')
         enddate = request.POST.get('enddate')
+        # startdate = (str)(start_date)
+        # enddate = (str)(end_date)
         print(startdate)
         print(enddate)
-
+        usd = request.user.id
+        income_series = list()
+        expense_series = list()
+        category_series_inc = list()
+        category_series_exp = list()
+        income_cat = dict()
+        expense_cat = dict()
         transactions = Transaction.objects.filter(
             user=request.user, date__range=[startdate, enddate])
 
-        return render(request, "piechart_report.html", {'transactions': transactions})
+        dataset_inc = Transaction.objects.raw(
+            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_income,management_transaction.date ,management_category.category_name as cat_name_inc FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.date between %s and %s  group by management_transaction.category_id order by management_transaction.date ', [startdate, enddate])
+        dataset_exp = Transaction.objects.raw(
+            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_expense,management_transaction.date ,management_category.category_name as cat_name_exp FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.date between %s and %s  group by management_transaction.category_id order by management_transaction.date ', [startdate, enddate])
+
+        for entry in dataset_inc:
+            uid = Transaction.objects.get(pk=entry.id)
+            amount = uid.amount
+            name = uid.user_id
+            if name == usd:
+                category_series_inc.append((entry.cat_name_inc))
+                income_series.append((int)(entry.total_income))
+                # income_cat[entry.cat_name_inc] = entry.total_income
+        for entry in dataset_exp:
+            uid = Transaction.objects.get(pk=entry.id)
+            name = uid.user_id
+            if name == usd:
+                category_series_exp.append((entry.cat_name_exp))
+                expense_series.append((int)(entry.total_expense))
+                # expense_cat[entry.cat_name_exp] = entry.total_expense
+
+        '''' income_series = list(map(lambda row: {'name': row , 'y': income_cat[row]}, category_series_inc))
+            expense_series = list(map(lambda row: {'name': row , 'y': expense_cat[row]}, category_series_exp))'''
+
+        print(income_series)
+        print(expense_series)
+        print(category_series_inc)
+        print(category_series_exp)
+
+        return render(request, "piechart_report.html", {'income_series': json.dumps(income_series),
+                                                        'expense_series': json.dumps(expense_series),
+                                                        'category_series_inc': json.dumps(category_series_inc),
+                                                        'category_series_exp': json.dumps(category_series_exp), })
+
     else:
         return render(request, "summary_report.html")
