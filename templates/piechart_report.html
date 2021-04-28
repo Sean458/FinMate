@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Summary Report{% endblock title %}
+
+{% block body %}
+
+<div class="page-wrapper">
+
+    <div class="page-breadcrumb">
+
+
+
+        <div class="container mt-5 ">
+
+            {% for i in transactions %}
+            <h1>{{i.id}}</h1>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock body %}

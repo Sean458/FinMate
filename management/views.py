@@ -36,23 +36,19 @@ def invest(request):
         interest = request.POST['interest']
         timeperiod = request.POST['timeperiod']
 
-        principle=list()
-        earned=list()
+        principle = list()
+        earned = list()
 
-        intr=int(investment)*(float(interest)/100)*int(timeperiod)
+        intr = int(investment)*(float(interest)/100)*int(timeperiod)
 
-        print("Interest",intr)
+        print("Interest", intr)
         principle.append((int)(investment))
         principle.append((int)(intr))
         earned.append((int)(intr))
         print(principle)
         print(earned)
 
-    
-
-
-        
-        return render(request, 'invest.html', {'principle': json.dumps(principle),'intr': json.dumps(intr),})
+        return render(request, 'invest.html', {'principle': json.dumps(principle), 'intr': json.dumps(intr), })
     else:
         return render(request, 'invest.html')
 
@@ -74,7 +70,7 @@ def index(request):
         #  .annotate(hours_count=sum('hours'),amount_count=sum('total')) \
         #  .group_by('VehicleID') \
         #  .order_by('VehicleID')
-        #usd = request.user.id
+        # usd = request.user.id
         c = CustomUser.objects.raw(
             'SELECT user_id from management_customuser where user_id=%s', [usd])
         # print(c)
@@ -140,9 +136,9 @@ def index(request):
             uid = Transaction.objects.get(pk=entry.id)
             amount = uid.amount
             name = uid.user_id
-            #cat_id = uid.category
-            #cat_or_id = Category.objects.get(pk = cat_id)
-            #cat_name = cat_or_id.category_name
+            # cat_id = uid.category
+            # cat_or_id = Category.objects.get(pk = cat_id)
+            # cat_name = cat_or_id.category_name
             if name == usd and cut != 5:
                 date_series.append((str)(entry.date))
                 expense_series.append((int)(entry.total_expense))
@@ -397,9 +393,9 @@ def transaction(request):
             sid.lexicon.update(new_words)
             # calculates the positive, negative, neutral, and compound sentiment score for the review
             score = sid.polarity_scores(i)
-            #print("Score", score)
+            # print("Score", score)
             compound = score.get('compound')
-            #print("compound", compound)
+            # print("compound", compound)
 
             total += compound
             print(total)
@@ -541,3 +537,18 @@ def report(request):
         return response
     else:
         return render(request, "monthly_report.html")
+
+
+def summaryreport(request):
+    if request.method == "POST":
+        startdate = request.POST.get('startdate')
+        enddate = request.POST.get('enddate')
+        print(startdate)
+        print(enddate)
+
+        transactions = Transaction.objects.filter(
+            user=request.user, date__range=[startdate, enddate])
+
+        return render(request, "piechart_report.html",{'transactions':transactions})
+    else:
+        return render(request, "summary_report.html")

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Summary Report{% endblock title %}
+
+{% block body %}
+
+<div class="page-wrapper">
+
+    <div class="page-breadcrumb">
+
+
+
+        <div class="container mt-5 ">
+
+            <form action="/summaryreport" method="POST">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Start Date</h4>
+                        <input type="date" class="form-control" name="startdate" required>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">End Date</h4>
+                        <input type="date" class="form-control" name="enddate" required>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button class="btn btn-info">Get Report</button>
+                </div>
+
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock body %}
