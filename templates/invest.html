@@ -62,7 +62,7 @@
                 type: 'pie'
               },
               title: {
-                text: 'Transactions'
+                text: 'Investment'
               },
               plotOptions: {
                 pie: {
@@ -75,7 +75,9 @@
               },
 
               series: [{
-                name: 'Principle',
+                name: 'Investment',
+                innerSize:'40%',
+
                 data: {{ principle }},
               colorByPoint: true,
                 }] 
