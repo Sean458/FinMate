@@ -549,6 +549,6 @@ def summaryreport(request):
         transactions = Transaction.objects.filter(
             user=request.user, date__range=[startdate, enddate])
 
-        return render(request, "piechart_report.html",{'transactions':transactions})
+        return render(request, "piechart_report.html", {'transactions': transactions})
     else:
         return render(request, "summary_report.html")
