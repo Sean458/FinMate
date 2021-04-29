@@ -100,7 +100,7 @@ def index(request):
             else:
                 percentile = 0.0
             # print('percentile',percentile)
-        percentile = percentile*100
+        percentile = int(percentile*100)
 
         categories = list()
         date_series = list()
