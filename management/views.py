@@ -75,9 +75,9 @@ def index(request):
             'SELECT distinct(management_transaction.id), sum(management_transaction.amount) as total_amount,date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id  GROUP BY management_transaction.id ORDER BY management_transaction.id')
         # print(dataset)
         dataset2 = Transaction.objects.raw(
-            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_expense,management_transaction.date ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s group by management_transaction.date order by management_transaction.date', [usd])
+            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_expense,management_transaction.date ,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=1 and management_transaction.user_id=%s group by management_transaction.date order by management_transaction.date DESC', [usd])
         dataset3 = Transaction.objects.raw(
-            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_income ,management_transaction.date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s group by management_transaction.date order by management_transaction.date', [usd])
+            'SELECT management_transaction.id,management_transaction.user_id, sum(management_transaction.amount) as total_income ,management_transaction.date,management_category.category_name FROM management_transaction INNER JOIN management_category ON management_transaction.category_id=management_category.id WHERE management_category.is_expense=0 and management_transaction.user_id=%s group by management_transaction.date order by management_transaction.date DESC', [usd])
         ctry = CustomUser.objects.raw(
             'SELECT user_id,country from management_customuser')
         #  .values('VehicleID') \
@@ -153,7 +153,7 @@ def index(request):
             # cat_id = uid.category
             # cat_or_id = Category.objects.get(pk = cat_id)
             # cat_name = cat_or_id.category_name
-            if name == usd and cut != 5:
+            if name == usd and cut < 5:
                 date_series.append((str)(entry.date))
                 expense_series.append((int)(entry.total_expense))
                 cut += 1
@@ -165,7 +165,7 @@ def index(request):
             amount = uid.amount
             name = uid.user_id
 
-            if name == usd and cuti != 5:
+            if name == usd and cuti < 5:
                 date_series_inc.append((str)(entry.date))
                 income_series.append((int)(entry.total_income))
                 cuti += 1
@@ -197,11 +197,11 @@ def index(request):
         print(income_series)
 
         return render(request, 'index.html', {'income': income, 'expenses': expenses, 'savings': savings, 'categories': json.dumps(categories),
-                                              'date_series': json.dumps(date_series),
-                                              'date_series_inc': json.dumps(date_series_inc),
+                                              'date_series': json.dumps(list(reversed(date_series))),
+                                              'date_series_inc': json.dumps(list(reversed(date_series_inc))),
                                               'amount_series': json.dumps(amount_series),
-                                              'expense_series': json.dumps(expense_series),
-                                              'income_series': json.dumps(income_series),
+                                              'expense_series': json.dumps(list(reversed(expense_series))),
+                                              'income_series': json.dumps(list(reversed(income_series))),
                                               'ind': ind,
                                               'usa': usa,
                                               'uk': uk,
