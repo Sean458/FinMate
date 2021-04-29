@@ -51,6 +51,8 @@
 
     <h1 style="text-align: center;"> Saving: {{saving}}</h1>
 
+    <h1>Expense:</h1>
+
     <table border="1" style="border-collapse: collapse;">
         <thead>
             <tr>
@@ -61,10 +63,32 @@
         </thead>
 
         <tbody>
-            {% for i in transobj %}
+            {% for key, value in expense_dict.items %}
             <tr>
-                <td>{{i.category}}</td>
-                <td>{{i.amount}}</td>
+                <td>{{key}}</td>
+                <td>{{value}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Income:</h1>
+
+    <table border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr>
+                <td>Category</td>
+                <td>Amount</td>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for key, value in income_dict.items %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{value}}</td>
 
             </tr>
             {% endfor %}
