@@ -519,23 +519,40 @@ def report(request):
         income = 0
         expense = 0
 
+        income_dict = {}
+        expense_dict = {}
         for i in transobj:
             if i.category.is_expense:
                 expense += i.amount
             else:
                 income += i.amount
 
-        print(income)
-        print(expense)
+            if i.category.is_expense:
+                if i.category.category_name in expense_dict:
+                    expense_dict[i.category.category_name] = expense_dict.get(
+                        i.category.category_name) + i.amount
+                else:
+                    expense_dict[i.category.category_name] = i.amount
+            else:
+                if i.category.category_name in income_dict:
+                    income_dict[i.category.category_name] = income_dict.get(
+                        i.category.category_name) + i.amount
+                else:
+                    income_dict[i.category.category_name] = i.amount
+
+        print(income_dict)
+        print(expense_dict)
 
         saving = income-expense
         print(saving)
 
         print(transobj)
 
+        print(dict)
+
         template_path = 'report.html'
         context = {'income': income, 'expense': expense,
-                   'saving': saving, 'date': monthyear, 'transobj': transobj}
+                   'saving': saving, 'date': monthyear, 'income_dict': income_dict, 'expense_dict': expense_dict}
         # Create a Django response object, and specify content_type as pdf
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'filename="report.pdf"'
