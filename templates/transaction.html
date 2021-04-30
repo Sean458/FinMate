@@ -35,7 +35,11 @@
                 <tbody id="tbody" id="tbody">
 
                     {% for t in alltransaction%}
-                    <tr>
+                    {% if t.category.is_expense %}
+                    <tr class="table-danger">
+                        {% else %}
+                    <tr class="table-success">
+                        {% endif %}
                         <td>
                             {{t.category.category_name}}
                         </td>
