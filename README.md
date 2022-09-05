@@ -1,6 +1,7 @@
 # FinMate
 
-The Financial Tracker and Investment Analysis (FinMate) is designed to help the user keep track of their financial plan and also provides the means to analyse data via charts and graphs. It also predicts future budgets and provide suggestions to maximize savings.
+The Financial Tracker and Investment Analysis (FinMate) is designed to help the user keep track of their financial plan and also provides the means to analyse data via charts and graphs. It also predicts future budgets and aims to bring about a change in users’ spending habits by providing real-time feedback based on the user’s expense patterns.<br></br>
+It also enhances the financial literacy of the user with the help of a chat bot which provides information on various financial topics and assists the user to make an informed financial decision.
 
 <br></br>
 <kbd>![Home](https://user-images.githubusercontent.com/41748847/188459751-edd38107-9e76-41c0-affa-74e479c9338d.PNG)</kbd>
